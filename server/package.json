@@ -1,0 +1,22 @@
+{
+  "name": "@solar-management/server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc --project tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "start": "NODE_ENV=production node dist/index.js"
+  },
+  "dependencies": {
+    "@solar-management/shared": "0.1.0",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/supertest": "^6.0.0",
+    "supertest": "^7.2.2",
+    "tsx": "^4.23.13"
+  }
+}

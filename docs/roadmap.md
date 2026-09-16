@@ -10,8 +10,8 @@ The agreed working style is guided pairing: implement one small checkpoint, exam
 
 | Checkpoint | Deliverable | Status |
 | --- | --- | --- |
-| 1. Understand the original | Architecture map, request trace, feature review, exercises | Materials prepared; learner review pending |
-| 2. Establish the foundation | npm workspaces, TypeScript, development scripts, linting, React calling an API health endpoint | Planned |
+| 1. Understand the original | Architecture map, request trace, feature review, exercises | Discussed with guided examples; independent recall to revisit |
+| 2. Establish the foundation | npm workspaces, TypeScript, development scripts, linting, React calling an API health endpoint | Implemented; learning review pending |
 | 3. Persist one useful feature | Versioned SQL migrations, reproducible seed, stored installations displayed through the API | Planned |
 | 4. Add accounts and ownership | Registration, sessions, logout, site CRUD, validation and authorization | Planned |
 | 5. Build monitoring | Ingestion, latest readings, history charts, energy summaries, local simulator submitting to the API | Planned |
@@ -59,4 +59,6 @@ Verify HTTPS sessions, persistence after restarts, logs, health checks, a databa
 
 The release is complete when the public demo works, registered users can manage their own installations, automated checks pass, and recovery has been demonstrated. The learner must also be able to explain a complete request, a SQL query, an energy calculation, an authorization check, and a design tradeoff independently.
 
-After checkpoint 1 review, the next implementation session starts with the smallest browser-to-API feature in checkpoint 2.
+Checkpoint 1's ownership question was answered independently. Measurement semantics and the energy calculation were discussed through worked examples; those explanations are not evidence of independent mastery. At the learner's request, work has advanced to checkpoint 2. Revisit the concepts as the corresponding features are implemented.
+
+Checkpoint 2 introduces native fetch and a small React effect so the first request is visible end to end. React Router, TanStack Query, and Recharts remain planned for the features that need routing, multiple server resources, and charts. The health response already has a shared TypeScript contract and runtime validator.

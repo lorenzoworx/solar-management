@@ -90,4 +90,11 @@ These remain unchecked until your answers have been reviewed:
 - [ ] Explain why elapsed time and missing coverage matter for energy.
 - [ ] Explain one feature to retain, one to redesign, and one to defer.
 
-After review, record what you learned and any remaining questions. The next checkpoint will create a React page that calls an Express health endpoint.
+## Review notes
+
+- Ownership: the learner correctly explained that removing the user predicate could expose other users' installation information to a logged-in user.
+- Measurements: reviewed the difference between state of charge and conversion efficiency through an explanation of the battery example.
+- Energy: reviewed trapezoidal integration and missing coverage. The 3 kW over 30 minutes example was corrected and explained as 1.5 kWh.
+- The full request trace and remaining checklist items have not been independently explained back. Keep them open for future practice rather than marking the entire checklist complete.
+
+The learner requested continuation after the guided examples. Checkpoint 2 now creates the first React page calling an Express health endpoint; these concepts will be revisited during the relevant implementation checkpoints.

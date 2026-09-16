@@ -1,0 +1,38 @@
+{
+  "name": "solar-management",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": "24.x", "npm": ">=11" },
+  "workspaces": ["shared", "server", "client"],
+  "scripts": {
+    "build:shared": "npm run build --workspace @solar-management/shared",
+    "dev": "npm run build:shared && concurrently --kill-others --names shared,api,web \"npm run dev --workspace @solar-management/shared\" \"npm run dev --workspace @solar-management/server\" \"npm run dev --workspace @solar-management/client\"",
+    "dev:api": "npm run build:shared && npm run dev --workspace @solar-management/server",
+    "dev:web": "npm run build:shared && npm run dev --workspace @solar-management/client",
+    "lint": "eslint . --max-warnings 0",
+    "typecheck": "npm run build:shared && npm run typecheck --workspaces && tsc --noEmit",
+    "test": "npm run build:shared && vitest run",
+    "test:watch": "npm run build:shared && vitest",
+    "test:e2e": "playwright test",
+    "build": "npm run build:shared && npm run build --workspace @solar-management/server && npm run build --workspace @solar-management/client",
+    "check": "npm run lint && npm run typecheck && npm test && npm run build",
+    "start": "npm run start --workspace @solar-management/server"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.63.0",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.7",
+    "@types/node": "^24.0.0",
+    "concurrently": "^10.0.5",
+    "eslint": "^10.10.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "globals": "^17.12.0",
+    "jsdom": "^29.1.1",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.70.0",
+    "vitest": "^5.0.1"
+  }
+}

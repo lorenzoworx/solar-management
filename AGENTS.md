@@ -20,4 +20,4 @@ This is a guided learning project for a CS graduate comfortable with the web sta
 - Make small commits reflecting actual completed work. Do not manufacture earlier dates or a fictional development history.
 - Keep secrets, local databases, backups, dependency folders, and build output out of Git.
 
-Current checkpoint: 1. Documentation is prepared; learner review remains pending. Application scaffolding starts at checkpoint 2.
+Current checkpoint: 2. The browser/API foundation is implemented; its learning review remains pending. Checkpoint 1 was discussed using an independent ownership answer and guided measurement/energy examples. Do not equate the worked examples with independent mastery. Database work starts at checkpoint 3.
