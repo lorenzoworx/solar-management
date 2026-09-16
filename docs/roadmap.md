@@ -1,0 +1,62 @@
+# Rebuild roadmap
+
+## Objective
+
+Build an explainable full-stack solar monitoring project, publish its source to [solar-management](https://github.com/lorenzoworx/solar-management), and deploy a working demo on the owner's Mac mini. The learning process is part of the deliverable.
+
+The agreed working style is guided pairing: implement one small checkpoint, examine the result, complete an exercise, and review understanding before advancing.
+
+## Checkpoints
+
+| Checkpoint | Deliverable | Status |
+| --- | --- | --- |
+| 1. Understand the original | Architecture map, request trace, feature review, exercises | Materials prepared; learner review pending |
+| 2. Establish the foundation | npm workspaces, TypeScript, development scripts, linting, React calling an API health endpoint | Planned |
+| 3. Persist one useful feature | Versioned SQL migrations, reproducible seed, stored installations displayed through the API | Planned |
+| 4. Add accounts and ownership | Registration, sessions, logout, site CRUD, validation and authorization | Planned |
+| 5. Build monitoring | Ingestion, latest readings, history charts, energy summaries, local simulator submitting to the API | Planned |
+| 6. Finish alerts and demo | Rule-based alerts and resolution, read-only demo, responsive UI and failure states | Planned |
+| 7. Deploy and present | Container deployment, public URL, screenshots, operating instructions, interview practice | Planned |
+
+Repository initialization accompanies the first documentation commit so checkpoint 1 can be published. Application scaffolding and build tooling still belong to checkpoint 2.
+
+## Agreed implementation choices
+
+| Area | Decision |
+| --- | --- |
+| Frontend | React, Vite, TypeScript, React Router, TanStack Query, Recharts, ordinary CSS |
+| Backend | Node 24 and Express, organized by feature; serve the compiled frontend from the same application in production |
+| Database | PostgreSQL 18, `pg`, one shared pool, parameterized SQL, versioned migrations through `node-pg-migrate` |
+| API boundary | Account/session actions, owned-site CRUD, reading ingestion/history/latest, summaries, alert resolution under `/api`; shared TypeScript contracts plus runtime validation |
+| Authentication | Hashed passwords; PostgreSQL-backed sessions; HTTP-only cookies, HTTPS settings, CSRF protection and authentication rate limits |
+| Authorization | Ownership checked server-side; shared demo account cannot mutate application data |
+| Demo | Instant read-only access to multiple sample installations; registration for users managing their own sites |
+| Tests | Vitest, PostgreSQL API integration tests, React Testing Library, Playwright |
+| Hosting | Existing Mac mini container runtime and Cloudflare Tunnel; PostgreSQL stays private |
+
+The first release covers accounts, sites, readings, charts, energy estimates, and explainable alerts. Predictions, PDF reports, physical device adapters, battery monitoring, and equipment control are deferred.
+
+## Data rules
+
+- Define solar power in kW, inverter AC voltage in V, and inverter temperature in degrees Celsius. Remove the original ambiguous efficiency field.
+- Store timestamps in UTC and label the time zone used in the interface.
+- Seed reproducible simulated readings spanning seven days. Display their actual dates, source, and freshness.
+- Estimate energy by trapezoidal integration between adjacent power samples. Skip gaps greater than 30 minutes, do not extrapolate outside observed coverage, and display incomplete coverage. A zero reading remains valid data.
+- Make ingestion retry-safe using uniqueness on site and timestamp. Insert a reading and its resulting alerts transactionally.
+- Allow at most one unresolved alert of each type per site. Demo rules start at inverter temperature >= 50 degrees Celsius and AC voltage outside 207–253 V. These are demo rules, not validated equipment-protection settings.
+
+## Verification and release
+
+Introduce tests with the behavior they protect. Cover cross-user access, attempted demo mutations, malformed inputs, duplicate readings, irregular sampling, missing data, concurrent alert creation, expired sessions, and database failures.
+
+GitHub Actions will run linting, type checking, tests, and production builds. Push completed checkpoints and tag the first verified release.
+
+Deploy the application, migration job, and PostgreSQL with Docker Compose. Use persistent database storage; wait for database readiness and successful migrations before application startup. Reuse the existing Cloudflare Tunnel for public application access. The server connection, public hostname, and existing tunnel network configuration are deployment inputs to inspect at checkpoint 7.
+
+Verify HTTPS sessions, persistence after restarts, logs, health checks, a database backup/restore, and application rollback. Record operating commands and deployment configuration without committing credentials.
+
+## Completion criteria
+
+The release is complete when the public demo works, registered users can manage their own installations, automated checks pass, and recovery has been demonstrated. The learner must also be able to explain a complete request, a SQL query, an energy calculation, an authorization check, and a design tradeoff independently.
+
+After checkpoint 1 review, the next implementation session starts with the smallest browser-to-API feature in checkpoint 2.
