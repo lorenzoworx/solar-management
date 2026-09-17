@@ -10,6 +10,7 @@ This is a guided learning project for a CS graduate comfortable with the web sta
 - Explain design choices, relevant code, failure cases, and how the work was verified. Include a small hands-on exercise.
 - Do not invent exercise answers or mark learning review complete without the learner's responses.
 - Keep README.md and the roadmap's checkpoint status current.
+- Keep updates and explanations concise to conserve tokens. Prefer one useful explanation and one exercise over a detailed play-by-play.
 
 ## Implementation boundaries
 
@@ -20,4 +21,4 @@ This is a guided learning project for a CS graduate comfortable with the web sta
 - Make small commits reflecting actual completed work. Do not manufacture earlier dates or a fictional development history.
 - Keep secrets, local databases, backups, dependency folders, and build output out of Git.
 
-Current checkpoint: 2. The browser/API foundation is implemented; its learning review remains pending. Checkpoint 1 was discussed using an independent ownership answer and guided measurement/energy examples. Do not equate the worked examples with independent mastery. Database work starts at checkpoint 3.
+Current checkpoint: 3 implemented; SQL exercise review pending. PostgreSQL persists three sample installations displayed through a read-only demo API. Checkpoint 2's response-editing exercise was observed by the learner, who requested continuation. Checkpoint 1 used an independent ownership answer and guided measurement/energy examples; do not equate worked examples with independent mastery. Accounts and ownership are checkpoint 4.

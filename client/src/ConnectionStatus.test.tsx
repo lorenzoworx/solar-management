@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
-import { App } from './App';
+import { ConnectionStatus } from './ConnectionStatus';
 
 const healthyResponse = {
   status: 'ok',
@@ -14,7 +14,7 @@ describe('connection screen', () => {
     let resolveRequest!: (value: Response) => void;
     const fetchMock = vi.fn(() => new Promise<Response>((resolve) => { resolveRequest = resolve; }));
     vi.stubGlobal('fetch', fetchMock);
-    render(<App />);
+    render(<ConnectionStatus />);
 
     expect(screen.getByRole('status')).toHaveTextContent('Checking connection');
     expect(screen.getByRole('button')).toBeDisabled();
@@ -31,7 +31,7 @@ describe('connection screen', () => {
       .mockRejectedValueOnce(new TypeError('Failed to fetch'))
       .mockResolvedValueOnce(Response.json(healthyResponse));
     vi.stubGlobal('fetch', fetchMock);
-    render(<App />);
+    render(<ConnectionStatus />);
 
     expect(await screen.findByRole('alert')).toHaveTextContent('Could not reach');
     await user.click(screen.getByRole('button', { name: 'Try again' }));
@@ -40,14 +40,14 @@ describe('connection screen', () => {
 
   it('does not report success when the server sends malformed JSON data', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(Response.json({ status: 'ok' })));
-    render(<App />);
+    render(<ConnectionStatus />);
     expect(await screen.findByRole('alert')).toHaveTextContent('unexpected response');
     expect(screen.queryByText('Connected')).not.toBeInTheDocument();
   });
 
   it('reports HTTP failures instead of treating them as successful requests', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(null, { status: 503 })));
-    render(<App />);
+    render(<ConnectionStatus />);
     expect(await screen.findByRole('alert')).toHaveTextContent('HTTP 503');
   });
 
@@ -57,7 +57,7 @@ describe('connection screen', () => {
       requestSignal = options.signal as AbortSignal;
       return new Promise<Response>(() => {});
     }));
-    const { unmount } = render(<App />);
+    const { unmount } = render(<ConnectionStatus />);
     unmount();
     expect(requestSignal?.aborted).toBe(true);
   });

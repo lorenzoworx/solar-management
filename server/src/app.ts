@@ -1,9 +1,11 @@
 import express from 'express';
 import { resolve } from 'node:path';
 import type { HealthResponse } from '@solar-management/shared';
+import type { Pool } from 'pg';
+import { demoSitesRouter } from './features/sites/sites.js';
 
 // Creating the app does not open a port, so tests can exercise it independently.
-export function createApp(clientDirectory?: string) {
+export function createApp(clientDirectory?: string, pool?: Pool) {
   const app = express();
   app.disable('x-powered-by');
 
@@ -14,6 +16,8 @@ export function createApp(clientDirectory?: string) {
       timestamp: new Date().toISOString(),
     } satisfies HealthResponse);
   });
+
+  if (pool) app.use('/api/demo/sites', demoSitesRouter(pool));
 
   // An unknown API endpoint must not accidentally return the frontend's HTML.
   app.use('/api', (_request, response) => {

@@ -52,6 +52,19 @@ button:disabled { opacity: 0.65; cursor: wait; }
 .next-step h2 { font-size: 14px; letter-spacing: 0; }
 .next-step p { font-size: 13px; color: #61705f; margin: 4px 0 0; }
 .site-footer { border-top: 1px solid #dce2d8; padding: 20px 0; display: flex; justify-content: space-between; gap: 16px; font-size: 11px; color: #61705f; }
+.installations { margin-bottom: 36px; }
+.collection-heading { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.collection-note { color: #5d6c64; font-size: 13px; }
+.site-grid { list-style: none; padding: 0; margin: 22px 0 16px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.installation-card { background: #fff; border: 1px solid #dce3d8; border-radius: 12px; padding: 24px; }
+.installation-card .eyebrow { font-size: 10px; margin-bottom: 12px; }
+.installation-card h3 { font-size: 19px; margin: 0; font-weight: 600; }
+.installation-card .location { color: #5d6c64; font-size: 13px; margin: 3px 0 24px; }
+.capacity { margin: 0; font-size: 15px; }
+.capacity strong { font-size: 34px; line-height: 1; font-weight: 600; letter-spacing: -1px; }
+.capacity-label { color: #5d6c64; font-size: 11px; margin: 4px 0 0; }
+.collection-error { border: 1px solid #e8cbc2; border-radius: 8px; padding: 16px; color: #a43d30; font-size: 14px; }
+@media (max-width: 760px) { .site-grid { grid-template-columns: 1fr; } }
 
 @media (max-width: 600px) {
   .page { padding: 0 20px; }

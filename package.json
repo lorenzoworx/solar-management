@@ -3,8 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "engines": { "node": "24.x", "npm": ">=11" },
-  "workspaces": ["shared", "server", "client"],
+  "engines": {
+    "node": "24.x",
+    "npm": ">=11"
+  },
+  "workspaces": [
+    "shared",
+    "server",
+    "client"
+  ],
   "scripts": {
     "build:shared": "npm run build --workspace @solar-management/shared",
     "dev": "npm run build:shared && concurrently --kill-others --names shared,api,web \"npm run dev --workspace @solar-management/shared\" \"npm run dev --workspace @solar-management/server\" \"npm run dev --workspace @solar-management/client\"",
@@ -17,7 +24,11 @@
     "test:e2e": "playwright test",
     "build": "npm run build:shared && npm run build --workspace @solar-management/server && npm run build --workspace @solar-management/client",
     "check": "npm run lint && npm run typecheck && npm test && npm run build",
-    "start": "npm run start --workspace @solar-management/server"
+    "start": "npm run start --workspace @solar-management/server",
+    "db:local:start": "bash scripts/local-db.sh start",
+    "db:local:stop": "bash scripts/local-db.sh stop",
+    "db:migrate": "npm run db:migrate --workspace @solar-management/server",
+    "db:seed": "npm run db:seed --workspace @solar-management/server"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

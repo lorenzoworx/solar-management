@@ -12,6 +12,20 @@ jobs:
   check:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_USER: solar_dev
+          POSTGRES_PASSWORD: local-ci-only
+          POSTGRES_DB: solar_management_dev
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U solar_dev -d solar_management_dev"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      DATABASE_URL: postgres://solar_dev:local-ci-only@127.0.0.1:5432/solar_management_dev
+      TEST_DATABASE_URL: postgres://solar_dev:local-ci-only@127.0.0.1:5432/solar_management_test
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -19,6 +33,8 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      - run: psql "$DATABASE_URL" -c 'CREATE DATABASE solar_management_test'
+      - run: npm run db:migrate && npm run db:seed
       - run: npm run check
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e

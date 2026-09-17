@@ -1,6 +1,8 @@
 import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { createApp } from './app.js';
+import { databaseUrl } from './config.js';
+import { createPool } from './db/pool.js';
 
 const configuredPort = process.env.API_PORT ?? '3001';
 const port = Number(configuredPort);
@@ -17,7 +19,8 @@ if (clientDirectory && !existsSync(clientDirectory + 'index.html')) {
   throw new Error('Frontend build is missing. Run npm run build from the repository root first.');
 }
 
-const server = createApp(clientDirectory).listen(port, host, () => {
+const pool = createPool(databaseUrl());
+const server = createApp(clientDirectory, pool).listen(port, host, () => {
   console.log('Solar Management API listening on http://' + host + ':' + port);
 });
 
@@ -27,5 +30,7 @@ server.on('error', (error) => {
 });
 
 for (const signal of ['SIGINT', 'SIGTERM'] as const) {
-  process.once(signal, () => server.close(() => process.exit(0)));
+  process.once(signal, () => server.close(() => {
+    void pool.end().then(() => process.exit(0));
+  }));
 }

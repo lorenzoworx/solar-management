@@ -119,7 +119,7 @@ Answer in your own words:
 
 Optional code exercise: change the service name returned in `server/src/app.ts`, save it, and check again. The UI should show the new value under **View API response**. The browser test currently expects the original name; explain why that assertion would need to change if the rename were intentional. Restore the name afterward unless you want to keep that change.
 
-This checkpoint's learning review is pending. The next checkpoint will persist and display the first solar installation using PostgreSQL.
+The learner edited the server response and confirmed the displayed response changed, then requested continuation. PostgreSQL persistence is now implemented in checkpoint 3. The walkthrough above records the foundation stage; use the current README for setup.
 
 ## References
 

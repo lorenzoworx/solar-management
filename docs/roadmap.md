@@ -11,8 +11,8 @@ The agreed working style is guided pairing: implement one small checkpoint, exam
 | Checkpoint | Deliverable | Status |
 | --- | --- | --- |
 | 1. Understand the original | Architecture map, request trace, feature review, exercises | Discussed with guided examples; independent recall to revisit |
-| 2. Establish the foundation | npm workspaces, TypeScript, development scripts, linting, React calling an API health endpoint | Implemented; learning review pending |
-| 3. Persist one useful feature | Versioned SQL migrations, reproducible seed, stored installations displayed through the API | Planned |
+| 2. Establish the foundation | npm workspaces, TypeScript, development scripts, linting, React calling an API health endpoint | Implemented; learner observed the response-editing exercise |
+| 3. Persist one useful feature | Versioned SQL migrations, reproducible seed, stored installations displayed through the API | Implemented; learning review pending |
 | 4. Add accounts and ownership | Registration, sessions, logout, site CRUD, validation and authorization | Planned |
 | 5. Build monitoring | Ingestion, latest readings, history charts, energy summaries, local simulator submitting to the API | Planned |
 | 6. Finish alerts and demo | Rule-based alerts and resolution, read-only demo, responsive UI and failure states | Planned |
@@ -59,6 +59,8 @@ Verify HTTPS sessions, persistence after restarts, logs, health checks, a databa
 
 The release is complete when the public demo works, registered users can manage their own installations, automated checks pass, and recovery has been demonstrated. The learner must also be able to explain a complete request, a SQL query, an energy calculation, an authorization check, and a design tradeoff independently.
 
-Checkpoint 1's ownership question was answered independently. Measurement semantics and the energy calculation were discussed through worked examples; those explanations are not evidence of independent mastery. At the learner's request, work has advanced to checkpoint 2. Revisit the concepts as the corresponding features are implemented.
+Checkpoint 1's ownership question was answered independently. Measurement semantics and the energy calculation were discussed through worked examples; those explanations are not evidence of independent mastery. Revisit these concepts as the corresponding features are implemented.
 
-Checkpoint 2 introduces native fetch and a small React effect so the first request is visible end to end. React Router, TanStack Query, and Recharts remain planned for the features that need routing, multiple server resources, and charts. The health response already has a shared TypeScript contract and runtime validator.
+Checkpoint 2 introduced native fetch and a small React effect so the first request was visible end to end. The learner changed the server response and observed the result, then requested continuation.
+
+Checkpoint 3 adds PostgreSQL 18, direct SQL, versioned migrations, a repeatable three-site seed, and TanStack Query for installation state. `/api/demo/sites` returns only explicitly marked demo records and has no mutation handlers. Ownership relationships arrive with accounts in checkpoint 4; seven days of simulated readings arrive in checkpoint 5. React Router and Recharts remain planned. Keep pairing concise at the learner's request.
