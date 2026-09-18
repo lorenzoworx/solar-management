@@ -1,6 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Navigate } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { singleSiteSchema, sitesSchema, type Site } from '@solar-management/shared';
 import { z } from 'zod';
 import { apiRequest, ApiError, mutate } from '../../api/request';
@@ -66,6 +66,7 @@ export function MySites() {
           <p className="eyebrow">Your installation</p><h2>{site.name}</h2><p className="location">{site.location}</p>
           <p className="capacity"><strong>{site.capacityKw.toLocaleString()}</strong> kW</p><p className="capacity-label">Installed capacity</p>
           <div className="site-actions">
+            <Link className="button-link" to={`/sites/${site.id}`}>Monitor</Link>
             <button className="button-secondary" onClick={() => setEditing(site)}>Edit</button>
             <button className="button-danger" disabled={remove.isPending} onClick={() => { if (window.confirm(`Delete ${site.name}? This cannot be undone.`)) remove.mutate(site.id); }}>Delete</button>
           </div>

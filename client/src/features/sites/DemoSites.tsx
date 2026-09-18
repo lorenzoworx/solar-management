@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { getDemoSites } from '../../api/sites';
+import { Link } from 'react-router-dom';
 
 export function DemoSites() {
   const sites = useQuery({
@@ -33,11 +34,12 @@ export function DemoSites() {
               <p className="location">{site.location}</p>
               <p className="capacity"><strong>{site.capacityKw.toLocaleString(undefined, { maximumFractionDigits: 3 })}</strong> kW</p>
               <p className="capacity-label">Installed capacity</p>
+              <Link className="button-link site-monitor-link" to={`/demo/sites/${site.id}`}>View monitoring</Link>
             </li>
           ))}
         </ul>
       )}
-      <p className="collection-note">Monitoring readings will be added in a later checkpoint.</p>
+      <p className="collection-note">Includes seven days of simulated readings with their actual dates, energy estimates, and example alerts.</p>
     </section>
   );
 }

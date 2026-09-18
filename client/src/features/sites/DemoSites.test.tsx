@@ -2,11 +2,12 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
+import { MemoryRouter } from 'react-router-dom';
 import { DemoSites } from './DemoSites';
 
 const sample = { id: '10000000-0000-4000-8000-000000000001', name: 'Cedar House', location: 'Austin, TX', capacityKw: 6.4 };
 function renderSites() {
-  return render(<QueryClientProvider client={new QueryClient()}><DemoSites /></QueryClientProvider>);
+  return render(<QueryClientProvider client={new QueryClient()}><MemoryRouter><DemoSites /></MemoryRouter></QueryClientProvider>);
 }
 
 describe('sample installations', () => {

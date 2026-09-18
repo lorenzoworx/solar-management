@@ -1,4 +1,5 @@
 export * from './accounts.js';
+export * from './monitoring.js';
 
 export interface HealthResponse {
   status: 'ok';

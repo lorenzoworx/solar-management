@@ -9,6 +9,7 @@ import { ownedSitesRouter } from './features/sites/owned-sites.js';
 import { errorHandler } from './http.js';
 import { securityOptions } from './config.js';
 import type { SecurityOptions } from './features/auth/sessions.js';
+import { monitoringRouter } from './features/monitoring/monitoring.js';
 
 // Creating the app does not open a port, so tests can exercise it independently.
 export function createApp(clientDirectory?: string, pool?: Pool, security: SecurityOptions = securityOptions()) {
@@ -31,6 +32,8 @@ export function createApp(clientDirectory?: string, pool?: Pool, security: Secur
   });
 
   if (pool) {
+    app.use('/api/demo/sites', monitoringRouter(pool, security, true));
+    app.use('/api/sites', monitoringRouter(pool, security));
     app.use('/api/demo/sites', demoSitesRouter(pool));
     app.use('/api/auth', authRouter(pool, security));
     app.use('/api/sites', ownedSitesRouter(pool, security));

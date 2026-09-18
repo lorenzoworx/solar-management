@@ -6,11 +6,13 @@ The starting point is an AI-assisted JavaScript prototype called Solar Dashboard
 
 ## Current status
 
-**Checkpoint 4: accounts and ownership implemented. Learning tasks are deferred to [questions.md](questions.md).**
+**Checkpoints 1–6 implemented. Deployment is next; learning tasks are deferred to [questions.md](questions.md).**
 
-Visitors can explore a read-only demo or register, log in, and manage their own installations. PostgreSQL persists accounts, sessions, and sites. The API validates inputs, checks ownership, protects writes with CSRF tokens, and rate limits account attempts. Readings and public deployment are still planned.
+Visitors can explore a read-only demo or register, log in, and manage their own installations. PostgreSQL persists accounts, sessions, and sites. The API validates inputs, checks ownership, protects writes with CSRF tokens, and rate limits account attempts. Monitoring includes stored simulated readings, date-filtered charts, energy estimates with coverage, and resolvable demo-rule alerts. Public deployment remains pending.
 
 ## Run locally
+
+![Monitoring a simulated installation](docs/images/demo-monitoring.png)
 
 Use Node 24, npm 11 or newer, and PostgreSQL 18. If you use nvm, run `nvm use` first. On macOS, PostgreSQL is available through `brew install postgresql@18`; make its binaries available in your PATH.
 
@@ -54,7 +56,8 @@ npm run test:e2e
 5. [Checkpoint 3 walkthrough and exercise](docs/checkpoints/03-persistence.md): follow a database query and edit a stored installation.
 6. [Checkpoint 4 walkthrough](docs/checkpoints/04-accounts.md): sessions, ownership, validation, and security tradeoffs.
 7. [Questions and tasks for later](questions.md): the consolidated learning backlog.
-8. [Rebuild roadmap](docs/roadmap.md): the agreed design and remaining checkpoints.
+8. [Monitoring and alert notes](docs/checkpoints/05-monitoring-and-alerts.md): units, energy estimates, retry safety, and the HTTP simulator.
+9. [Rebuild roadmap](docs/roadmap.md): the agreed design and remaining checkpoints.
 
 ## Source layout
 
@@ -68,9 +71,11 @@ npm run test:e2e
 
 One root lockfile records dependencies for all three npm workspaces. Build output and dependencies are ignored by Git.
 
-## Planned first release
+## First-release features
 
-Users will manage solar installations, view stored readings and energy estimates, and resolve rule-based alerts. Visitors will be able to explore a shared, read-only demo or register to manage their own sites. All first-release telemetry will be clearly labeled as simulated.
+Users can manage solar installations, view stored readings and energy estimates, and resolve rule-based alerts. Visitors can explore a shared, read-only demo or register to manage their own sites. All first-release telemetry is clearly labeled as simulated. Samples cover September 11–18, 2026 (UTC); their actual dates and coverage appear in the UI.
+
+Run `npm run simulate` after configuring a registered account and owned site as described in the monitoring notes. The simulator submits readings through the HTTP API.
 
 The planned stack is React and TypeScript, an Express API, and PostgreSQL accessed through parameterized SQL. The production application will run in containers on a Mac mini behind an existing Cloudflare Tunnel.
 

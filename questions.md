@@ -123,6 +123,17 @@ psql postgres://solar_dev@127.0.0.1:55432/solar_management_dev \
 - [ ] Provide or identify the Mac mini SSH connection and application directory.
 - [ ] Choose the public hostname and identify the existing Cloudflare Tunnel route/network.
 
+## Monitoring and alerts
+
+- [ ] Compare Cedar House with Willow Farm in the demo. Explain why missing samples lower coverage and break the chart line.
+- [ ] Reproduce the 0.75 kWh example above using trapezoidal integration. Explain why a fully covered window is still an estimate.
+- [ ] Explain why missing voltage is `null`, while zero volts is a valid value that triggers the voltage rule.
+- [ ] Add the same reading twice through the API. Explain the 201/200 distinction, and why changing its values gives 409.
+- [ ] Run `npm run simulate` using the configuration in [the monitoring notes](docs/checkpoints/05-monitoring-and-alerts.md). Follow its request through authentication, SQL, and the chart.
+- [ ] Explain how the composite primary key, transaction, site lock, and partial unique alert index each protect a different invariant.
+- [ ] Trigger a 50°C alert, resolve it, and submit a new high-temperature reading. Explain why a new alert may appear but a retry cannot reopen it.
+- [ ] Explain what the 30-minute gap limit and fixed demo thresholds cannot tell us about real equipment.
+
 ## Final interview practice
 
 - [ ] Independently explain a complete request, a parameterized SQL query, an authorization check, an energy calculation, and one design tradeoff.

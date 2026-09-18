@@ -25,6 +25,7 @@ const digest = (token: string) => createHash('sha256').update(token).digest('hex
 
 export function loadSession(pool: Pool, options: SecurityOptions): RequestHandler {
   return async (request, _response, next) => {
+    delete request.authSession;
     const token = parse(request.headers.cookie ?? '')[cookieName(options)];
     if (token && /^[A-Za-z0-9_-]{43}$/.test(token)) {
       const result = await pool.query<AuthSession>(`

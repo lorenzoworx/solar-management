@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
 import { ConnectionStatus } from './ConnectionStatus';
 import { DemoSites } from './features/sites/DemoSites';
 import { AccountNav, AuthPage } from './features/auth/Auth';
 import { MySites } from './features/sites/MySites';
+const SiteMonitor = lazy(() => import('./features/monitoring/SiteMonitor').then((module) => ({ default: module.SiteMonitor })));
 
 export function App() {
   const [queryClient] = useState(() => new QueryClient());
@@ -20,7 +21,7 @@ export function App() {
             <AccountNav />
           </header>
           <main>
-            <Routes>
+            <Suspense fallback={<p>Loading workspace…</p>}><Routes>
               <Route path="/" element={<>
                 <p className="eyebrow">Solar Management</p>
                 <h1>A home for your<br />solar installations.</h1>
@@ -32,8 +33,10 @@ export function App() {
               <Route path="/register" element={<AuthPage key="register" register />} />
               <Route path="/login" element={<AuthPage key="login" />} />
               <Route path="/sites" element={<MySites />} />
+              <Route path="/sites/:id" element={<SiteMonitor />} />
+              <Route path="/demo/sites/:id" element={<SiteMonitor demo />} />
               <Route path="*" element={<><h1>Page not found</h1><p><Link to="/">Back to home</Link></p></>} />
-            </Routes>
+            </Routes></Suspense>
           </main>
           <footer className="site-footer"><span>Solar Management</span><span>Development preview · Sample data</span></footer>
         </div>

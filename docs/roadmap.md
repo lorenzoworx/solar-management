@@ -14,8 +14,8 @@ Build in tested checkpoints with honest commits. As requested on September 18, 2
 | 2. Establish the foundation | npm workspaces, TypeScript, development scripts, linting, React calling an API health endpoint | Implemented; learner observed the response-editing exercise |
 | 3. Persist one useful feature | Versioned SQL migrations, reproducible seed, stored installations displayed through the API | Implemented; learning review pending |
 | 4. Add accounts and ownership | Registration, sessions, logout, site CRUD, validation and authorization | Implemented; learning tasks deferred |
-| 5. Build monitoring | Ingestion, latest readings, history charts, energy summaries, local simulator submitting to the API | Planned |
-| 6. Finish alerts and demo | Rule-based alerts and resolution, read-only demo, responsive UI and failure states | Planned |
+| 5. Build monitoring | Ingestion, latest readings, history charts, energy summaries, local simulator submitting to the API | Implemented and tested |
+| 6. Finish alerts and demo | Rule-based alerts and resolution, read-only demo, responsive UI and failure states | Implemented and tested |
 | 7. Deploy and present | Container deployment, public URL, screenshots, operating instructions, interview practice | Planned |
 
 Repository initialization accompanies the first documentation commit so checkpoint 1 can be published. Application scaffolding and build tooling still belong to checkpoint 2.
@@ -66,3 +66,5 @@ Checkpoint 2 introduced native fetch and a small React effect so the first reque
 Checkpoint 3 adds PostgreSQL 18, direct SQL, versioned migrations, a repeatable three-site seed, and TanStack Query for installation state. `/api/demo/sites` returns only explicitly marked demo records and has no mutation handlers. Ownership relationships arrive with accounts in checkpoint 4; seven days of simulated readings arrive in checkpoint 5. React Router and Recharts remain planned. Keep pairing concise at the learner's request.
 
 Checkpoint 4 adds React Router, registration/login/logout, PostgreSQL sessions, scrypt password hashes, CSRF protection, authentication rate limits, and full owned-site CRUD. Shared Zod schemas validate new contracts. Browser tests now use the dedicated test database.
+
+Checkpoints 5–6 include the seven-day reproducible seed, UTC charts, trapezoidal energy with coverage, retry-safe ingestion, transactional alerts, resolution, and the authenticated HTTP simulator. Seventy-seven unit/API/UI checks and eight browser scenarios pass locally.

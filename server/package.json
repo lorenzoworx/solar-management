@@ -9,7 +9,8 @@
     "typecheck": "tsc --noEmit",
     "start": "NODE_ENV=production node dist/index.js",
     "db:migrate": "tsx src/db/command.ts migrate",
-    "db:seed": "tsx src/db/command.ts seed"
+    "db:seed": "tsx src/db/command.ts seed",
+    "simulate": "tsx src/simulator.ts"
   },
   "dependencies": {
     "@solar-management/shared": "0.1.0",

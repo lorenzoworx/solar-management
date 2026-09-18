@@ -27,8 +27,9 @@
     "start": "npm run start --workspace @solar-management/server",
     "db:local:start": "bash scripts/local-db.sh start",
     "db:local:stop": "bash scripts/local-db.sh stop",
-    "db:migrate": "npm run db:migrate --workspace @solar-management/server",
-    "db:seed": "npm run db:seed --workspace @solar-management/server"
+    "db:migrate": "npm run build:shared && npm run db:migrate --workspace @solar-management/server",
+    "db:seed": "npm run build:shared && npm run db:seed --workspace @solar-management/server",
+    "simulate": "npm run build:shared && npm run simulate --workspace @solar-management/server"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

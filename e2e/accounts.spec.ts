@@ -27,6 +27,17 @@ test('registration, persistent login, site CRUD, logout and login', async ({ pag
   await expect(page.getByRole('heading', { name: 'Test rooftop' })).toBeVisible();
   await page.reload();
   await expect(page.getByRole('heading', { name: 'Test rooftop' })).toBeVisible();
+  await page.getByRole('link', { name: 'Monitor', exact: true }).click();
+  await expect(page.getByText('No readings in this date range.')).toBeVisible();
+  await page.getByRole('button', { name: 'Add reading' }).click();
+  await page.getByLabel('Solar power (kW)').fill('0');
+  await page.getByLabel('Inverter temperature (°C, optional)').fill('50');
+  await page.getByRole('button', { name: 'Save reading' }).click();
+  await expect(page.locator('.metric-card').first()).toContainText('0 kW');
+  await expect(page.getByText('Inverter temperature reached 50 °C')).toBeVisible();
+  await page.getByRole('button', { name: 'Resolve', exact: true }).click();
+  await expect(page.locator('.alert-list')).toContainText('Resolved');
+  await page.getByRole('link', { name: '← Installations' }).click();
   await page.getByRole('button', { name: 'Edit', exact: true }).click();
   await page.getByLabel('Installation name').fill('Updated rooftop');
   await page.getByRole('button', { name: 'Save installation' }).click();
