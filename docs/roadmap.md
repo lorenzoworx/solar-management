@@ -4,7 +4,7 @@
 
 Build an explainable full-stack solar monitoring project, publish its source to [solar-management](https://github.com/lorenzoworx/solar-management), and deploy a working demo on the owner's Mac mini. The learning process is part of the deliverable.
 
-The agreed working style is guided pairing: implement one small checkpoint, examine the result, complete an exercise, and review understanding before advancing.
+Build in tested checkpoints with honest commits. As requested on September 18, 2026, all learning questions and tasks go in `questions.md`; reviews no longer pause implementation.
 
 ## Checkpoints
 
@@ -13,7 +13,7 @@ The agreed working style is guided pairing: implement one small checkpoint, exam
 | 1. Understand the original | Architecture map, request trace, feature review, exercises | Discussed with guided examples; independent recall to revisit |
 | 2. Establish the foundation | npm workspaces, TypeScript, development scripts, linting, React calling an API health endpoint | Implemented; learner observed the response-editing exercise |
 | 3. Persist one useful feature | Versioned SQL migrations, reproducible seed, stored installations displayed through the API | Implemented; learning review pending |
-| 4. Add accounts and ownership | Registration, sessions, logout, site CRUD, validation and authorization | Planned |
+| 4. Add accounts and ownership | Registration, sessions, logout, site CRUD, validation and authorization | Implemented; learning tasks deferred |
 | 5. Build monitoring | Ingestion, latest readings, history charts, energy summaries, local simulator submitting to the API | Planned |
 | 6. Finish alerts and demo | Rule-based alerts and resolution, read-only demo, responsive UI and failure states | Planned |
 | 7. Deploy and present | Container deployment, public URL, screenshots, operating instructions, interview practice | Planned |
@@ -64,3 +64,5 @@ Checkpoint 1's ownership question was answered independently. Measurement semant
 Checkpoint 2 introduced native fetch and a small React effect so the first request was visible end to end. The learner changed the server response and observed the result, then requested continuation.
 
 Checkpoint 3 adds PostgreSQL 18, direct SQL, versioned migrations, a repeatable three-site seed, and TanStack Query for installation state. `/api/demo/sites` returns only explicitly marked demo records and has no mutation handlers. Ownership relationships arrive with accounts in checkpoint 4; seven days of simulated readings arrive in checkpoint 5. React Router and Recharts remain planned. Keep pairing concise at the learner's request.
+
+Checkpoint 4 adds React Router, registration/login/logout, PostgreSQL sessions, scrypt password hashes, CSRF protection, authentication rate limits, and full owned-site CRUD. Shared Zod schemas validate new contracts. Browser tests now use the dedicated test database.

@@ -1,3 +1,5 @@
+export * from './accounts.js';
+
 export interface HealthResponse {
   status: 'ok';
   service: string;

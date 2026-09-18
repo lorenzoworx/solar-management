@@ -103,21 +103,9 @@ These tests establish the first interaction. They do not establish persistence, 
 
 The dependency lockfile records the versions used. TypeScript is kept on the 6.0 line because the selected TypeScript ESLint integration does not yet declare support for 7. The jsdom version supports the installed Node 24.14 runtime. These are compatibility decisions, not reasons to upgrade the user's global tools.
 
-## Your exercise: break and repair the connection
+## Learning tasks
 
-1. Stop `npm run dev` with Ctrl+C.
-2. Run `npm run dev:api` in one terminal and `npm run dev:web` in another.
-3. Open the page and confirm that it connects.
-4. Stop only the API terminal. Click **Check again** in the page and inspect the failed `/api/health` request in the browser's Network panel.
-5. Start the API again and click **Try again**. Confirm that the same page recovers.
-
-Answer in your own words:
-
-- Why can the page remain visible while the API is stopped?
-- Which process generated the timestamp shown in the reply?
-- Why do we validate JSON when we already have a TypeScript interface?
-
-Optional code exercise: change the service name returned in `server/src/app.ts`, save it, and check again. The UI should show the new value under **View API response**. The browser test currently expects the original name; explain why that assertion would need to change if the rename were intentional. Restore the name afterward unless you want to keep that change.
+The connection exercise and questions have moved to [questions.md](../../questions.md).
 
 The learner edited the server response and confirmed the displayed response changed, then requested continuation. PostgreSQL persistence is now implemented in checkpoint 3. The walkthrough above records the foundation stage; use the current README for setup.
 

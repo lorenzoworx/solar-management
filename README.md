@@ -6,9 +6,9 @@ The starting point is an AI-assisted JavaScript prototype called Solar Dashboard
 
 ## Current status
 
-**Checkpoint 3: PostgreSQL persistence implemented; learning review pending.**
+**Checkpoint 4: accounts and ownership implemented. Learning tasks are deferred to [questions.md](questions.md).**
 
-The React page displays three fictional installations stored in PostgreSQL through a read-only demo API. It validates responses and handles loading, empty lists, failures, and retries. One Node process serves the frontend and API in production. Accounts, readings, and public deployment are still planned.
+Visitors can explore a read-only demo or register, log in, and manage their own installations. PostgreSQL persists accounts, sessions, and sites. The API validates inputs, checks ownership, protects writes with CSRF tokens, and rate limits account attempts. Readings and public deployment are still planned.
 
 ## Run locally
 
@@ -33,14 +33,7 @@ The local database script uses `pg_config --bindir` (or your `PG_BIN` override).
 
 `npm run db:local:stop` stops this cluster; starting it again preserves data. Ctrl+C on the app does not stop PostgreSQL. Logs are in `.local/postgres.log`. Rerun the seed to restore sample values without duplicating their IDs. Existing `.env` files should be edited rather than overwritten. On another PostgreSQL installation, create separate development/test databases and set their URLs in `.env` instead of using the local cluster script.
 
-To try the production build locally:
-
-```sh
-npm run build
-npm start
-```
-
-Open [the built app](http://127.0.0.1:3001). Stop the development API first because both use port 3001. The local production command uses macOS/Linux environment-variable syntax, matching the planned development and hosting environments.
+`npm run build` compiles the production frontend and server. Production startup (`npm start`) requires `APP_ORIGIN` set to the exact public HTTPS origin and `TRUST_PROXY` configured for the known private proxy path. Secure cookies require HTTPS; use `npm run dev` for local HTTP development. Container and tunnel deployment is checkpoint 7.
 
 ## Verify changes
 
@@ -50,7 +43,7 @@ npx playwright install chromium
 npm run test:e2e
 ```
 
-`check` runs ESLint, TypeScript checks, unit/API/UI tests, and production builds. PostgreSQL must be running. API tests migrate and clear only `solar_management_test`, so reserve that database for tests. Browser tests use the seeded development database and start their own app servers; stop an existing `npm run dev` session first. GitHub Actions runs the checks against PostgreSQL 18 on pushes to main and pull requests.
+`check` runs ESLint, TypeScript checks, unit/API/UI tests, and production builds. PostgreSQL must be running. API tests migrate and clear only `solar_management_test`, so reserve that database for tests. Browser tests also use `solar_management_test`, applying migrations and seeding samples before starting their own servers. Run API and browser tests sequentially and stop an existing `npm run dev` session first. GitHub Actions runs the checks against PostgreSQL 18 on pushes to main and pull requests.
 
 ## Learn the project
 
@@ -59,7 +52,9 @@ npm run test:e2e
 3. [Checkpoint 1 exercises](docs/checkpoints/01-exercises.md): explain the request, investigate a measurement, and reason about energy.
 4. [Checkpoint 2 walkthrough and exercise](docs/checkpoints/02-foundation.md): follow the new request, run the tests, and debug a connection failure.
 5. [Checkpoint 3 walkthrough and exercise](docs/checkpoints/03-persistence.md): follow a database query and edit a stored installation.
-6. [Rebuild roadmap](docs/roadmap.md): the agreed design and remaining checkpoints.
+6. [Checkpoint 4 walkthrough](docs/checkpoints/04-accounts.md): sessions, ownership, validation, and security tradeoffs.
+7. [Questions and tasks for later](questions.md): the consolidated learning backlog.
+8. [Rebuild roadmap](docs/roadmap.md): the agreed design and remaining checkpoints.
 
 ## Source layout
 
@@ -83,6 +78,6 @@ Forecasting, PDF reports, real hardware integration, and battery monitoring are 
 
 ## How the rebuild works
 
-Each checkpoint has a concrete result, an explanation, relevant verification, and a hands-on exercise. Learning review happens before the next checkpoint. Commits record completed changes as they happen; notes distinguish implemented behavior from future plans.
+Each checkpoint has a concrete result, an explanation, relevant verification, and a hands-on exercise. Learning questions and exercises live in `questions.md`; implementation continues without waiting for answers, as requested on September 18, 2026. Commits record completed changes as they happen; notes distinguish implemented behavior from future plans.
 
 The original application remains a separate reference. Source paths in the walkthrough refer to that original project, not files in this repository. Important excerpts are included so the walkthrough can also be read on GitHub.

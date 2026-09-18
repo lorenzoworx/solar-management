@@ -7,6 +7,7 @@ export default defineConfig({
         test: {
           name: 'node',
           environment: 'node',
+          fileParallelism: false,
           include: ['server/tests/**/*.test.ts', 'shared/tests/**/*.test.ts'],
         },
       },

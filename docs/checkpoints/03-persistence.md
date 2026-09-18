@@ -25,16 +25,9 @@ The versioned migration creates the table. The seed inserts reproducible sample 
 
 TanStack Query tracks loading, cached data, errors, and retries for the installation list. The original health check stays separate: a reachable API can still have a failed database connection. A failed database read returns HTTP 503, never a successful empty list or raw SQL error.
 
-## One exercise
+## Learning tasks
 
-Run this in the project directory, then reload the browser:
-
-```sh
-psql postgres://solar_dev@127.0.0.1:55432/solar_management_dev \
-  -c "UPDATE sites SET name = 'My first stored site' WHERE id = '10000000-0000-4000-8000-000000000001';"
-```
-
-Explain where the changed name came from and why no React source edit was needed. Restore the sample with `npm run db:seed`.
+The SQL exercise and questions have moved to [questions.md](../../questions.md). Review can happen after implementation.
 
 ## Verification and limits
 

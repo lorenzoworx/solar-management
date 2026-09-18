@@ -1,4 +1,13 @@
 import { defineConfig, devices } from '@playwright/test';
+import { existsSync } from 'node:fs';
+import { loadEnvFile } from 'node:process';
+
+const envFile = new URL('./.env', import.meta.url);
+if (existsSync(envFile)) loadEnvFile(envFile);
+const databaseUrl = process.env.TEST_DATABASE_URL;
+if (!databaseUrl || new URL(databaseUrl).pathname !== '/solar_management_test') {
+  throw new Error('Browser tests require the dedicated solar_management_test database.');
+}
 
 export default defineConfig({
   testDir: './e2e',
@@ -11,10 +20,10 @@ export default defineConfig({
   },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
   webServer: {
-    command: 'npm run dev',
+    command: 'npm run db:migrate && npm run db:seed && npm run dev',
     url: 'http://127.0.0.1:5175',
     reuseExistingServer: false,
     timeout: 30_000,
-    env: { API_PORT: '3001' },
+    env: { API_PORT: '3001', DATABASE_URL: databaseUrl, APP_ORIGIN: 'http://127.0.0.1:5175' },
   },
 });

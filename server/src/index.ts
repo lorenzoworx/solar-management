@@ -20,6 +20,11 @@ if (clientDirectory && !existsSync(clientDirectory + 'index.html')) {
 }
 
 const pool = createPool(databaseUrl());
+// Expiry is enforced by every lookup; pruning only reclaims storage.
+const pruneSessions = () => { void pool.query('DELETE FROM sessions WHERE expires_at <= now()').catch(() => console.error('Session cleanup failed.')); };
+pruneSessions();
+const cleanup = setInterval(pruneSessions, 15 * 60 * 1000);
+cleanup.unref();
 const server = createApp(clientDirectory, pool).listen(port, host, () => {
   console.log('Solar Management API listening on http://' + host + ':' + port);
 });
@@ -30,7 +35,8 @@ server.on('error', (error) => {
 });
 
 for (const signal of ['SIGINT', 'SIGTERM'] as const) {
-  process.once(signal, () => server.close(() => {
-    void pool.end().then(() => process.exit(0));
-  }));
+  process.once(signal, () => {
+    clearInterval(cleanup);
+    server.close(() => { void pool.end().then(() => process.exit(0)); });
+  });
 }

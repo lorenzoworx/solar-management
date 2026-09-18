@@ -18,7 +18,7 @@ if (process.env.DATABASE_URL && new URL(process.env.DATABASE_URL).pathname === '
 const pool = createPool(url);
 const app = createApp(undefined, pool);
 beforeAll(() => migrate(url));
-beforeEach(() => pool.query('TRUNCATE sites'));
+beforeEach(() => pool.query('TRUNCATE sites, sessions, users CASCADE'));
 afterAll(() => pool.end());
 
 describe('saved demo installations (real PostgreSQL)', () => {
@@ -43,7 +43,8 @@ describe('saved demo installations (real PostgreSQL)', () => {
 
   it('excludes non-demo records even when the caller asks for them', async () => {
     await seedDemoSites(pool);
-    await pool.query('INSERT INTO sites (name, location, capacity_kw) VALUES ($1, $2, $3)', ["Owner's private site", 'Chicago, IL', 5]);
+    const owner = await pool.query("INSERT INTO users (name, email, password_hash) VALUES ('Owner', 'owner@example.test', 'fixture') RETURNING id");
+    await pool.query('INSERT INTO sites (name, location, capacity_kw, owner_id) VALUES ($1, $2, $3, $4)', ["Owner's private site", 'Chicago, IL', 5, owner.rows[0].id]);
     const response = await request(app).get('/api/demo/sites?is_demo=false');
     expect(response.body.sites).toHaveLength(3);
     expect(response.text).not.toContain("Owner's private site");
@@ -60,7 +61,7 @@ describe('saved demo installations (real PostgreSQL)', () => {
   });
 
   it.each([0, -1, 'NaN', 1000001])('rejects invalid capacity %s in the database', async (capacity) => {
-    await expect(pool.query('INSERT INTO sites (name, location, capacity_kw) VALUES ($1, $2, $3)', ['Test site', 'Test location', capacity]))
+    await expect(pool.query('INSERT INTO sites (name, location, capacity_kw, is_demo) VALUES ($1, $2, $3, true)', ['Test site', 'Test location', capacity]))
       .rejects.toMatchObject({ code: '23514' });
   });
 

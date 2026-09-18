@@ -3,11 +3,24 @@ import { resolve } from 'node:path';
 import type { HealthResponse } from '@solar-management/shared';
 import type { Pool } from 'pg';
 import { demoSitesRouter } from './features/sites/sites.js';
+import helmet from 'helmet';
+import { authRouter } from './features/auth/auth.js';
+import { ownedSitesRouter } from './features/sites/owned-sites.js';
+import { errorHandler } from './http.js';
+import { securityOptions } from './config.js';
+import type { SecurityOptions } from './features/auth/sessions.js';
 
 // Creating the app does not open a port, so tests can exercise it independently.
-export function createApp(clientDirectory?: string, pool?: Pool) {
+export function createApp(clientDirectory?: string, pool?: Pool, security: SecurityOptions = securityOptions()) {
   const app = express();
   app.disable('x-powered-by');
+  app.set('trust proxy', security.trustProxy);
+  app.use(helmet(security.production ? {} : {
+    strictTransportSecurity: false,
+    contentSecurityPolicy: { directives: { 'upgrade-insecure-requests': null } },
+  }));
+  app.use('/api', (_request, response, next) => { response.set('Cache-Control', 'no-store'); next(); });
+  app.use(express.json({ limit: '16kb' }));
 
   app.get('/api/health', (_request, response) => {
     response.set('Cache-Control', 'no-store').json({
@@ -17,7 +30,11 @@ export function createApp(clientDirectory?: string, pool?: Pool) {
     } satisfies HealthResponse);
   });
 
-  if (pool) app.use('/api/demo/sites', demoSitesRouter(pool));
+  if (pool) {
+    app.use('/api/demo/sites', demoSitesRouter(pool));
+    app.use('/api/auth', authRouter(pool, security));
+    app.use('/api/sites', ownedSitesRouter(pool, security));
+  }
 
   // An unknown API endpoint must not accidentally return the frontend's HTML.
   app.use('/api', (_request, response) => {
@@ -31,5 +48,6 @@ export function createApp(clientDirectory?: string, pool?: Pool) {
     });
   }
 
+  app.use(errorHandler);
   return app;
 }
