@@ -1,8 +1,9 @@
 import { randomUUID } from 'node:crypto';
 import { expect, test } from '@playwright/test';
+import { appPath } from './paths.js';
 
 test('a visitor can try the demo without registering', async ({ page }) => {
-  await page.goto('/');
+  await page.goto(appPath('/'));
   await page.getByRole('link', { name: 'Try demo' }).click();
   await expect(page.getByText('Read-only demo')).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Cedar House' })).toBeVisible();
@@ -11,11 +12,12 @@ test('a visitor can try the demo without registering', async ({ page }) => {
 
 test('registration, persistent login, site CRUD, logout and login', async ({ page, context, baseURL }) => {
   const email = `browser-${randomUUID()}@example.test`;
+  const password = randomUUID() + randomUUID();
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('/register');
+  await page.goto(appPath('/register'));
   await page.getByLabel('Name', { exact: true }).fill('Portfolio Tester');
   await page.getByLabel('Email').fill(email);
-  await page.getByLabel('Password').fill('A browser test passphrase!');
+  await page.getByLabel('Password').fill(password);
   await page.getByRole('button', { name: 'Create account', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'My installations' })).toBeVisible();
   const sessionCookie = (await context.cookies()).find((cookie) => cookie.name.endsWith('sm_session'));
@@ -48,11 +50,11 @@ test('registration, persistent login, site CRUD, logout and login', async ({ pag
   await expect(page.getByRole('heading', { name: 'Updated rooftop' })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
   await page.getByRole('button', { name: 'Log out' }).click();
-  await expect(page).toHaveURL('/login');
-  await page.goto('/sites');
-  await expect(page).toHaveURL('/login');
+  await expect(page).toHaveURL(appPath('/login'));
+  await page.goto(appPath('/sites'));
+  await expect(page).toHaveURL(appPath('/login'));
   await page.getByLabel('Email').fill(email);
-  await page.getByLabel('Password').fill('A browser test passphrase!');
+  await page.getByLabel('Password').fill(password);
   await page.getByRole('button', { name: 'Log in', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Updated rooftop' })).toBeVisible();
   page.once('dialog', (dialog) => dialog.accept());

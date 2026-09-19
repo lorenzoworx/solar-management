@@ -1,4 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
+import { appPath } from './e2e/paths.js';
 
 export default defineConfig({
   testDir: './e2e', forbidOnly: true, retries: 1, reporter: 'list',
@@ -12,7 +13,7 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'node scripts/tls-test-proxy.mjs', url: 'https://127.0.0.1:8443',
+    command: 'node scripts/tls-test-proxy.mjs', url: 'https://127.0.0.1:8443' + appPath('/'),
     ignoreHTTPSErrors: true, reuseExistingServer: false, timeout: 30000,
   },
 });

@@ -1,7 +1,8 @@
 import { isHealthResponse, type HealthResponse } from '@solar-management/shared';
+import { apiUrl } from './url';
 
 export async function getHealth(signal: AbortSignal): Promise<HealthResponse> {
-  const response = await fetch('/api/health', {
+  const response = await fetch(apiUrl('/health'), {
     signal: AbortSignal.any([signal, AbortSignal.timeout(5000)]),
     cache: 'no-store',
   });

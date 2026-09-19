@@ -11,11 +11,11 @@ export function App() {
   const [queryClient] = useState(() => new QueryClient());
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
+      <BrowserRouter basename={import.meta.env.BASE_URL}>
         <div className="page">
           <header className="site-header">
             <Link className="brand" to="/" aria-label="Solar Management home">
-              <img src="/sun.svg" width="40" height="40" alt="" />
+              <img src={import.meta.env.BASE_URL + 'sun.svg'} width="40" height="40" alt="" />
               <span>Solar Management</span>
             </Link>
             <AccountNav />
@@ -38,7 +38,7 @@ export function App() {
               <Route path="*" element={<><h1>Page not found</h1><p><Link to="/">Back to home</Link></p></>} />
             </Routes></Suspense>
           </main>
-          <footer className="site-footer"><span>Solar Management</span><span>Development preview · Sample data</span></footer>
+          <footer className="site-footer"><span>Solar Management</span><span>Portfolio demo · Simulated data</span></footer>
         </div>
       </BrowserRouter>
     </QueryClientProvider>

@@ -1,5 +1,6 @@
 import { sessionSchema } from '@solar-management/shared';
 import type { z } from 'zod';
+import { apiUrl } from './url';
 
 export class ApiError extends Error {
   constructor(public status: number, message: string) { super(message); }
@@ -7,7 +8,7 @@ export class ApiError extends Error {
 export async function apiRequest<T>(path: string, schema: z.ZodType<T>, init: RequestInit = {}): Promise<T> {
   let response: Response;
   try {
-    response = await fetch('/api' + path, {
+    response = await fetch(apiUrl(path), {
       ...init, credentials: 'same-origin', cache: 'no-store',
       signal: init.signal ? AbortSignal.any([init.signal, AbortSignal.timeout(10000)]) : AbortSignal.timeout(10000),
     });

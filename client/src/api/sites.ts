@@ -1,9 +1,10 @@
 import { isDemoSitesResponse } from '@solar-management/shared';
+import { apiUrl } from './url';
 
 export async function getDemoSites(signal: AbortSignal) {
   let response: Response;
   try {
-    response = await fetch('/api/demo/sites', {
+    response = await fetch(apiUrl('/demo/sites'), {
       signal: AbortSignal.any([signal, AbortSignal.timeout(5000)]),
       cache: 'no-store',
     });

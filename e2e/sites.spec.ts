@@ -1,7 +1,8 @@
 import { expect, test } from '@playwright/test';
+import { appPath } from './paths.js';
 
 test('shows persisted sample sites after reload on desktop and mobile', async ({ page }) => {
-  await page.goto('/demo');
+  await page.goto(appPath('/demo'));
   const sites = page.getByRole('region', { name: 'Sample installations' });
   await expect(sites.getByRole('listitem')).toHaveCount(3);
   await expect(sites.getByRole('heading', { name: 'Cedar House' })).toBeVisible();
@@ -14,7 +15,7 @@ test('shows persisted sample sites after reload on desktop and mobile', async ({
 
 test('recovers from an installation API failure', async ({ page }) => {
   await page.route('**/api/demo/sites', (route) => route.fulfill({ status: 503, json: { error: { message: 'Unavailable' } } }));
-  await page.goto('/demo');
+  await page.goto(appPath('/demo'));
   await expect(page.getByRole('alert')).toContainText('HTTP 503');
   await page.unroute('**/api/demo/sites');
   await page.getByRole('button', { name: 'Retry installations' }).click();

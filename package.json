@@ -22,6 +22,7 @@
     "test": "npm run build:shared && vitest run",
     "test:watch": "npm run build:shared && vitest",
     "test:e2e": "playwright test",
+    "test:live": "playwright test --config playwright.live.config.ts",
     "build": "npm run build:shared && npm run build --workspace @solar-management/server && npm run build --workspace @solar-management/client",
     "check": "npm run lint && npm run typecheck && npm test && npm run build",
     "start": "npm run start --workspace @solar-management/server",

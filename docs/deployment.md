@@ -1,6 +1,31 @@
 # Deployment and recovery
 
-The application is prepared for PostgreSQL 18 and a Node 24 container on the Mac mini. **The public deployment is not complete:** its SSH connection, hostname, and existing Cloudflare Tunnel configuration are still needed in the local, Git-ignored `questions.md` file. Docker is not installed on the current development MacBook; container verification runs in GitHub Actions.
+The public demo is available at [boywithabot.com/projects/solar-management/](https://boywithabot.com/projects/solar-management/). The application uses PostgreSQL 18 and a Node 24 container. **Release verification is incomplete:** public registration currently fails its HTTPS check; server access and the actual proxy configuration are still needed in the local, Git-ignored `questions.md` file. Docker is not installed on the current development MacBook; container verification runs in GitHub Actions.
+
+## Public verification
+
+On September 19, 2026, seven public browser scenarios passed with normal HTTPS certificate validation: API connectivity, retry states, demo access, desktop/mobile layouts, monitoring, direct page reloads, and date filtering. `/projects/solar-management/api/ready` returned 200. The session cookie has Secure, HTTP-only, SameSite=Lax, and Path=/ settings. Readings remain clearly labeled as simulated and historical.
+
+The registration scenario failed with HTTP 403 and **“HTTPS is required.”** No verification account was created. This is a release blocker for account writes. Cloudflare and Caddy appear in the response headers; the exact private proxy chain has not been inspected. A lost `X-Forwarded-Proto: https` header or an incorrect Express trust setting is the working diagnosis, not a confirmed configuration finding. The browser's HTTPS URL alone does not establish what protocol Express sees after proxies.
+
+Inspect the connector-to-Caddy-to-app path and the deployed `TRUST_PROXY`. Caddy ignores incoming forwarded headers by default; when an authenticated/private tunnel connector precedes it, configure Caddy's `servers > trusted_proxies` for that connector's actual IP/CIDR so the original HTTPS scheme is preserved. Review the real path before choosing Express's hop count. Validate and reload the existing Caddy configuration while preserving the portfolio's other routes. Keep the application's HTTPS check enabled. See [Caddy forwarded-header behavior](https://caddyserver.com/docs/caddyfile/directives/reverse_proxy#defaults) and [Express proxy settings](https://expressjs.com/en/guide/behind-proxies/).
+
+After the proxy correction, run `npm run test:live`. It reuses the eight application browser scenarios, creates one test account, deletes that account's test installation, and logs out. Account deletion is not implemented, so a successful run leaves an empty verification account with a random password. It performs no database reset, restart, or rollback. Rehearse recovery on the actual host separately before tagging a verified release.
+
+## Hosting beneath a URL path
+
+For the portfolio deployment, use these non-secret settings:
+
+```dotenv
+APP_ORIGIN=https://boywithabot.com
+APP_BASE_PATH=/projects/solar-management/
+```
+
+`APP_ORIGIN` is an origin, without the path. `APP_BASE_PATH` includes the leading and trailing slash and is compiled into the frontend. Rebuild the image after changing it. Vite assets, the React Router basename, and frontend API requests all use that prefix; the API inside the container still serves `/api`.
+
+The reverse proxy must strip `/projects/solar-management` before forwarding to this application's container, including API, assets, and direct page loads. In an existing Caddy site block, the route shape is `handle_path /projects/solar-management/* { reverse_proxy <actual-private-app-address> }`; add a redirect from the slashless path to its trailing-slash form. Substitute the real upstream and merge this route into the existing configuration. This path rule does not replace the trusted-proxy configuration above. See [Vite public base paths](https://vite.dev/guide/build.html#public-base-path).
+
+The live site already had subpath adjustments when inspected, while commit `8cd73ac` in GitHub still assumed `/`. The repository now makes that build setting explicit. The deployed checkout/revision must be identified before updating it; a source push alone does not establish that the live build changed.
 
 ## First deployment
 
@@ -8,6 +33,7 @@ On the Mac mini, with Docker Compose available, clone this repository and create
 
 - `DATABASE_PASSWORD`: a new 64-character hexadecimal password from `openssl rand -hex 32`.
 - `APP_ORIGIN`: the exact public HTTPS origin, such as `https://solar.your-domain.example`, without a trailing slash.
+- `APP_BASE_PATH`: `/` for a dedicated hostname, or `/projects/solar-management/` for the portfolio route. This is a build setting.
 - `APP_IMAGE`: a unique local image tag for the checked-out commit, such as `solar-management:<commit-sha>`.
 - `APP_PORT`: an unused loopback port, default 3001.
 - `TRUST_PROXY`: the known count of private proxy hops, usually 1 for a direct tunnel connector. Confirm the actual topology before setting it.
@@ -77,7 +103,7 @@ docker compose --env-file .env.production -p solar-management up -d --no-deps --
 
 For a compatible application rollback, restore the previous `APP_IMAGE` value in `.env.production`, then run `up -d --no-deps --wait app` without rebuilding. Keep previous images until the new release is verified. Never automatically reverse a schema migration or delete the PostgreSQL volume to roll back application code. An incompatible schema change needs a planned data restore or forward fix.
 
-Public HTTPS, persistent login after restart, backup recovery on the Mac mini, and rollback to an actual preceding release remain release-gate checks in `questions.md`. No verified-release tag is created before those checks pass.
+Public demo HTTPS is verified. Public account writes, persistent login after restart, backup recovery on the Mac mini, and rollback to an actual preceding release remain release-gate checks in `questions.md`. No verified-release tag is created before those checks pass.
 
 ## CI deployment checks
 

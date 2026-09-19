@@ -84,6 +84,13 @@ jobs:
           openssl req -x509 -newkey rsa:2048 -nodes -keyout .local/ci-key.pem -out .local/ci-cert.pem -days 1 -subj '/CN=localhost' -addext 'subjectAltName=IP:127.0.0.1'
       - run: npx playwright install --with-deps chromium
       - run: npx playwright test --config playwright.production.config.ts
+      - name: Verify the portfolio URL subpath
+        env:
+          APP_BASE_PATH: /projects/solar-management/
+        run: |
+          docker compose --env-file .env.production.example -p sm-ci build app
+          docker compose --env-file .env.production.example -p sm-ci up -d --no-deps --wait app
+          npx playwright test --config playwright.production.config.ts --project production-chromium
       - name: Container logs
         if: failure()
         run: docker compose --env-file .env.production.example -p sm-ci logs --no-color

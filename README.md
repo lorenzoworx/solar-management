@@ -6,9 +6,9 @@ The starting point is an AI-assisted JavaScript prototype called Solar Dashboard
 
 ## Current status
 
-**Checkpoints 1–6 implemented. Container deployment and recovery checks pass in CI; public hosting awaits connection details. Learning tasks are deferred to the local, Git-ignored `questions.md` file.**
+**[Explore the live demo](https://boywithabot.com/projects/solar-management/). Checkpoints 1–6 are implemented; public account verification currently needs a proxy HTTPS fix. Learning tasks are deferred to the local, Git-ignored `questions.md` file.**
 
-Visitors can explore a read-only demo or register, log in, and manage their own installations. PostgreSQL persists accounts, sessions, and sites. The API validates inputs, checks ownership, protects writes with CSRF tokens, and rate limits account attempts. Monitoring includes stored simulated readings, date-filtered charts, energy estimates with coverage, and resolvable demo-rule alerts. Public deployment remains pending.
+Visitors can explore a read-only demo. The application also implements registration, login, and owned installations, tested locally and in containers; the current public proxy rejects account writes with “HTTPS is required.” PostgreSQL persists accounts, sessions, and sites. Monitoring includes stored simulated readings, date-filtered charts, energy estimates with coverage, and resolvable demo-rule alerts. See [live verification and the remaining release checks](docs/deployment.md#public-verification).
 
 ## Run locally
 
@@ -47,7 +47,9 @@ npm run test:e2e
 
 `check` runs ESLint, TypeScript checks, unit/API/UI tests, and production builds. PostgreSQL must be running. API tests migrate and clear only `solar_management_test`, so reserve that database for tests. Browser tests also use `solar_management_test`, applying migrations and seeding samples before starting their own servers. Run API and browser tests sequentially and stop an existing `npm run dev` session first. GitHub Actions runs the checks against PostgreSQL 18 on pushes to main and pull requests.
 
-The container CI job also builds the production image, checks Compose startup/migrations, restarts containers, verifies backup restoration, and runs browser scenarios through a local HTTPS proxy. A separate recovery scenario checks database-outage responses and keeps an authenticated browser session through restarts, rollback to a preceding compatible revision, and return to the current image. See [deployment and recovery](docs/deployment.md) for Mac mini setup, Cloudflare routing, logs, backups, and rollback. Public access is not yet verified.
+The container CI job also builds the production image, checks Compose startup/migrations, restarts containers, verifies backup restoration, and runs browser scenarios at both `/` and `/projects/solar-management/` through a local HTTPS proxy. A separate recovery scenario checks database-outage responses and keeps an authenticated browser session through restarts, rollback to a preceding compatible revision, and return to the current image. See [deployment and recovery](docs/deployment.md) for Mac mini setup, Cloudflare routing, logs, backups, and rollback.
+
+`npm run test:live` checks the deployed site with normal certificate validation. It creates an empty test account, exercises and deletes its own installation, and logs out; it never resets a database or restarts containers. Override `LIVE_BASE_URL` to test another deployment you control. To check only the public demo, use `npm run test:live -- --grep-invert 'registration, persistent login'`.
 
 ## Learn the project
 
@@ -90,7 +92,7 @@ Users can manage solar installations, view stored readings and energy estimates,
 
 Run `npm run simulate` after configuring a registered account and owned site as described in the monitoring notes. The simulator submits readings through the HTTP API.
 
-The planned stack is React and TypeScript, an Express API, and PostgreSQL accessed through parameterized SQL. The production application will run in containers on a Mac mini behind an existing Cloudflare Tunnel.
+The stack is React and TypeScript, an Express API, and PostgreSQL accessed through parameterized SQL. The public app is hosted beneath the portfolio's `/projects/solar-management/` path; responses pass through Cloudflare and Caddy. The exact server configuration and on-host recovery still need verification.
 
 Forecasting, PDF reports, real hardware integration, and battery monitoring are deferred until the monitoring core is understood and tested.
 
