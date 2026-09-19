@@ -107,7 +107,7 @@ Public demo HTTPS is verified. Public account writes, persistent login after res
 
 ## CI deployment checks
 
-Verified for commit `efa2cc4ec36b45ca6f2f48d16d8bca6229ef5c85` in [GitHub Actions run 35424571307](https://github.com/lorenzoworx/solar-management/actions/runs/35424571307): lint, type checking, production builds, 77 unit/API/UI tests, eight development browser scenarios, and nine production HTTPS/recovery scenarios passed. Container startup, restart persistence, backup restoration, safe database-outage responses, and authenticated rollback to the preceding compatible revision all passed.
+Verified for commit `dd464e9694c403910c407ccb6c4590a5f5c009b5` in [GitHub Actions run 35453359736](https://github.com/lorenzoworx/solar-management/actions/runs/35453359736): lint, type checking, production builds, 77 unit/API/UI tests, eight development browser scenarios, nine production HTTPS/recovery scenarios at `/`, and eight production browser scenarios at `/projects/solar-management/` passed. Container startup, restart persistence, backup restoration, safe database-outage responses, and authenticated rollback to the preceding compatible revision all passed. Public registration remains a separate proxy configuration failure as recorded above.
 
 GitHub Actions builds the production image, starts Compose with its real migration dependency, seeds data, checks restart persistence, and restores a backup into a separate database. It then runs the browser scenarios through a local HTTPS proxy using an ephemeral self-signed certificate. Certificate validation is bypassed only for that local CI proxy; the public deployment must use normal trusted HTTPS. These checks do not prove that the Mac mini's tunnel and public DNS are configured correctly.
 
