@@ -27,7 +27,7 @@ TanStack Query tracks loading, cached data, errors, and retries for the installa
 
 ## Learning tasks
 
-The SQL exercise and questions have moved to [questions.md](../../questions.md). Review can happen after implementation.
+The SQL exercise and questions have moved to the local, Git-ignored `questions.md` file. Review can happen after implementation.
 
 ## Verification and limits
 

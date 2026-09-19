@@ -1,6 +1,6 @@
 # Checkpoint 4: accounts and ownership
 
-Visitors can explore `/demo`. Registration signs a user in; `/sites` lets that user create, list, view through the API, edit, and delete their own installations. Logout returns to the login page. All questions and exercises are in [questions.md](../../questions.md).
+Visitors can explore `/demo`. Registration signs a user in; `/sites` lets that user create, list, view through the API, edit, and delete their own installations. Logout returns to the login page. All questions and exercises are in the local, Git-ignored `questions.md` file.
 
 ## Request flow
 

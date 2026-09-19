@@ -6,7 +6,7 @@ The starting point is an AI-assisted JavaScript prototype called Solar Dashboard
 
 ## Current status
 
-**Checkpoints 1–6 implemented. Container deployment and recovery checks pass in CI; public hosting awaits connection details. Learning tasks are deferred to [questions.md](questions.md).**
+**Checkpoints 1–6 implemented. Container deployment and recovery checks pass in CI; public hosting awaits connection details. Learning tasks are deferred to the local, Git-ignored `questions.md` file.**
 
 Visitors can explore a read-only demo or register, log in, and manage their own installations. PostgreSQL persists accounts, sessions, and sites. The API validates inputs, checks ownership, protects writes with CSRF tokens, and rate limits account attempts. Monitoring includes stored simulated readings, date-filtered charts, energy estimates with coverage, and resolvable demo-rule alerts. Public deployment remains pending.
 
@@ -57,7 +57,7 @@ The container CI job also builds the production image, checks Compose startup/mi
 4. [Checkpoint 2 walkthrough and exercise](docs/checkpoints/02-foundation.md): follow the new request, run the tests, and debug a connection failure.
 5. [Checkpoint 3 walkthrough and exercise](docs/checkpoints/03-persistence.md): follow a database query and edit a stored installation.
 6. [Checkpoint 4 walkthrough](docs/checkpoints/04-accounts.md): sessions, ownership, validation, and security tradeoffs.
-7. [Questions and tasks for later](questions.md): the consolidated learning backlog.
+7. Local `questions.md`: the consolidated learning backlog, kept outside Git.
 8. [Monitoring and alert notes](docs/checkpoints/05-monitoring-and-alerts.md): units, energy estimates, retry safety, and the HTTP simulator.
 9. [Rebuild roadmap](docs/roadmap.md): the agreed design and remaining checkpoints.
 

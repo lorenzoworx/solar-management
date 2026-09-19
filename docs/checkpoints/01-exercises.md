@@ -1,6 +1,6 @@
 # Checkpoint 1 learning review
 
-All questions and exercises now live in [questions.md](../../questions.md). Learning review is deferred and does not pause the build.
+All questions and exercises now live in the local, Git-ignored `questions.md` file. Learning review is deferred and does not pause the build.
 
 ## Review notes
 

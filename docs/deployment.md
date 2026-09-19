@@ -1,6 +1,6 @@
 # Deployment and recovery
 
-The application is prepared for PostgreSQL 18 and a Node 24 container on the Mac mini. **The public deployment is not complete:** its SSH connection, hostname, and existing Cloudflare Tunnel configuration are still needed in [questions.md](../questions.md). Docker is not installed on the current development MacBook; container verification runs in GitHub Actions.
+The application is prepared for PostgreSQL 18 and a Node 24 container on the Mac mini. **The public deployment is not complete:** its SSH connection, hostname, and existing Cloudflare Tunnel configuration are still needed in the local, Git-ignored `questions.md` file. Docker is not installed on the current development MacBook; container verification runs in GitHub Actions.
 
 ## First deployment
 

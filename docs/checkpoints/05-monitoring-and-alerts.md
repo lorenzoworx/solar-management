@@ -1,6 +1,6 @@
 # Checkpoints 5 and 6: monitoring and alerts
 
-The demo now has seven days of simulated readings, charts, energy estimates, coverage indicators, and sample alerts. Registered users can add simulated readings to their own sites, run a local HTTP simulator, and resolve alerts. Learning tasks remain in [questions.md](../../questions.md).
+The demo now has seven days of simulated readings, charts, energy estimates, coverage indicators, and sample alerts. Registered users can add simulated readings to their own sites, run a local HTTP simulator, and resolve alerts. Learning tasks remain in the local, Git-ignored `questions.md` file.
 
 ## Data and API
 

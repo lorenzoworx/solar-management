@@ -105,7 +105,7 @@ The dependency lockfile records the versions used. TypeScript is kept on the 6.0
 
 ## Learning tasks
 
-The connection exercise and questions have moved to [questions.md](../../questions.md).
+The connection exercise and questions have moved to the local, Git-ignored `questions.md` file.
 
 The learner edited the server response and confirmed the displayed response changed, then requested continuation. PostgreSQL persistence is now implemented in checkpoint 3. The walkthrough above records the foundation stage; use the current README for setup.
 
