@@ -52,6 +52,7 @@ jobs:
     env:
       APP_ORIGIN: https://127.0.0.1:8443
       APP_IMAGE: solar-management:ci
+      ROLLBACK_IMAGE: solar-management:ci-previous
     steps:
       - uses: actions/checkout@v4
       - name: Generate disposable container credentials
@@ -64,6 +65,14 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      - name: Check out the preceding verified container revision
+        uses: actions/checkout@v4
+        with:
+          ref: 3e3798097bffe54d89bed18343f1730fe7f524d3
+          path: .local/rollback-baseline
+          persist-credentials: false
+      - name: Build the compatible rollback image
+        run: docker build --tag "$ROLLBACK_IMAGE" .local/rollback-baseline
       - run: docker compose --env-file .env.production.example -p sm-ci build app
       - run: docker compose --env-file .env.production.example -p sm-ci up -d --wait app
       - run: docker compose --env-file .env.production.example -p sm-ci run --rm migrate node server/dist/db/command.js seed

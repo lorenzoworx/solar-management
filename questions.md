@@ -120,12 +120,23 @@ psql postgres://solar_dev@127.0.0.1:55432/solar_management_dev \
 
 ## Deployment inputs (needed at deployment)
 
+Fill in these non-secret details so deployment can continue. Keep passwords, private keys, and tunnel tokens out of this file and Git.
+
+| Detail | Value |
+| --- | --- |
+| Mac mini SSH target (`user@host` or configured SSH alias) | Pending |
+| Application directory on the Mac mini | Pending |
+| Public HTTPS hostname | Pending |
+| Existing Cloudflare Tunnel name and connector location (host or Docker) | Pending |
+| Connector configuration/Compose file location and network, if applicable | Pending |
+
 - [ ] Provide or identify the Mac mini SSH connection and application directory.
 - [ ] Choose the public hostname and identify the existing Cloudflare Tunnel route/network.
 - [ ] Confirm whether the existing tunnel connector runs on the host or in Docker, and identify its persistent network configuration. No SSH configuration or Docker CLI was available on this development MacBook.
 - [ ] After deployment, verify the public HTTPS URL, Secure session cookies, and login persistence after container restarts.
 - [ ] Run the documented backup/restore check on the Mac mini and keep a private off-host backup.
 - [ ] Demonstrate rollback to the preceding application image, checking schema compatibility first.
+- [ ] Explain why the CI recovery test preserves the browser cookie while restarting the server, and why a successful rollback rehearsal cannot prove every old image is compatible with a new schema.
 - [ ] Tag the first verified release only after public access and recovery checks pass.
 
 ## Monitoring and alerts

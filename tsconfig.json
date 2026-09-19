@@ -6,5 +6,5 @@
     "types": ["node"],
     "noEmit": true
   },
-  "include": ["*.ts", "e2e/**/*.ts", "shared/tests/**/*.ts"]
+  "include": ["*.ts", "e2e/**/*.ts", "deployment-tests/**/*.ts", "shared/tests/**/*.ts"]
 }

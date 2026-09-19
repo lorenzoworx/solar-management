@@ -47,7 +47,7 @@ npm run test:e2e
 
 `check` runs ESLint, TypeScript checks, unit/API/UI tests, and production builds. PostgreSQL must be running. API tests migrate and clear only `solar_management_test`, so reserve that database for tests. Browser tests also use `solar_management_test`, applying migrations and seeding samples before starting their own servers. Run API and browser tests sequentially and stop an existing `npm run dev` session first. GitHub Actions runs the checks against PostgreSQL 18 on pushes to main and pull requests.
 
-The container CI job also builds the production image, checks Compose startup/migrations, restarts containers, verifies backup restoration, and runs browser scenarios through a local HTTPS proxy. See [deployment and recovery](docs/deployment.md) for Mac mini setup, Cloudflare routing, logs, backups, and rollback. Public access is not yet verified.
+The container CI job also builds the production image, checks Compose startup/migrations, restarts containers, verifies backup restoration, and runs browser scenarios through a local HTTPS proxy. A separate recovery scenario checks database-outage responses and keeps an authenticated browser session through restarts, rollback to a preceding compatible revision, and return to the current image. See [deployment and recovery](docs/deployment.md) for Mac mini setup, Cloudflare routing, logs, backups, and rollback. Public access is not yet verified.
 
 ## Learn the project
 
