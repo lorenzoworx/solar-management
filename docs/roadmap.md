@@ -16,7 +16,7 @@ Build in tested checkpoints with honest commits. As requested on September 18, 2
 | 4. Add accounts and ownership | Registration, sessions, logout, site CRUD, validation and authorization | Implemented; learning tasks deferred |
 | 5. Build monitoring | Ingestion, latest readings, history charts, energy summaries, local simulator submitting to the API | Implemented and tested |
 | 6. Finish alerts and demo | Rule-based alerts and resolution, read-only demo, responsive UI and failure states | Implemented and tested |
-| 7. Deploy and present | Container deployment, public URL, screenshots, operating instructions, interview practice | Container files, screenshot, and runbook prepared; public deployment/recovery pending host details |
+| 7. Deploy and present | Container deployment, public URL, screenshots, operating instructions, interview practice | Container startup, HTTPS browser tests, restart persistence, and backup restoration verified in CI; public deployment/recovery pending host details |
 
 Repository initialization accompanies the first documentation commit so checkpoint 1 can be published. Application scaffolding and build tooling still belong to checkpoint 2.
 
@@ -49,7 +49,7 @@ The first release covers accounts, sites, readings, charts, energy estimates, an
 
 Introduce tests with the behavior they protect. Cover cross-user access, attempted demo mutations, malformed inputs, duplicate readings, irregular sampling, missing data, concurrent alert creation, expired sessions, and database failures.
 
-GitHub Actions will run linting, type checking, tests, and production builds. Push completed checkpoints and tag the first verified release.
+GitHub Actions runs linting, type checking, tests, production builds, and container recovery checks. Push completed checkpoints and tag the first verified release after the remaining public deployment checks pass.
 
 Deploy the application, migration job, and PostgreSQL with Docker Compose. Use persistent database storage; wait for database readiness and successful migrations before application startup. Reuse the existing Cloudflare Tunnel for public application access. The server connection, public hostname, and existing tunnel network configuration are deployment inputs to inspect at checkpoint 7.
 

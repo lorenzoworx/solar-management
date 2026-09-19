@@ -21,4 +21,4 @@ This is a guided learning project for a CS graduate comfortable with the web sta
 - Make small commits reflecting actual completed work. Do not manufacture earlier dates or a fictional development history.
 - Keep secrets, local databases, backups, dependency folders, and build output out of Git.
 
-Current checkpoint: 7, deployment preparation. Checkpoints 1–6 are implemented and tested. Learning review remains deferred to questions.md; do not mark it complete without evidence. Public deployment requires the Mac mini connection and hostname/tunnel configuration recorded there.
+Current checkpoint: 7. Checkpoints 1–6 are implemented and tested; container startup, HTTPS browser scenarios, restart persistence, and backup restoration pass in CI. Learning review remains deferred to questions.md; do not mark it complete without evidence. Public deployment requires the Mac mini connection and hostname/tunnel configuration recorded there.

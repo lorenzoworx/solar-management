@@ -6,7 +6,7 @@ The starting point is an AI-assisted JavaScript prototype called Solar Dashboard
 
 ## Current status
 
-**Checkpoints 1–6 implemented. Container deployment is prepared; public hosting awaits connection details. Learning tasks are deferred to [questions.md](questions.md).**
+**Checkpoints 1–6 implemented. Container deployment and recovery checks pass in CI; public hosting awaits connection details. Learning tasks are deferred to [questions.md](questions.md).**
 
 Visitors can explore a read-only demo or register, log in, and manage their own installations. PostgreSQL persists accounts, sessions, and sites. The API validates inputs, checks ownership, protects writes with CSRF tokens, and rate limits account attempts. Monitoring includes stored simulated readings, date-filtered charts, energy estimates with coverage, and resolvable demo-rule alerts. Public deployment remains pending.
 

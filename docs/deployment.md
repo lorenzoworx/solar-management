@@ -81,4 +81,6 @@ Public HTTPS, persistent login after restart, backup recovery on the Mac mini, a
 
 ## CI deployment checks
 
+Verified for commit `3e3798097bffe54d89bed18343f1730fe7f524d3` in [GitHub Actions run 35411850305](https://github.com/lorenzoworx/solar-management/actions/runs/35411850305): lint, type checking, production builds, 77 unit/API/UI tests, eight development browser scenarios, and eight production HTTPS browser scenarios passed. Container startup, restart persistence, and backup restoration also passed.
+
 GitHub Actions builds the production image, starts Compose with its real migration dependency, seeds data, checks restart persistence, and restores a backup into a separate database. It then runs the browser scenarios through a local HTTPS proxy using an ephemeral self-signed certificate. Certificate validation is bypassed only for that local CI proxy; the public deployment must use normal trusted HTTPS. These checks do not prove that the Mac mini's tunnel and public DNS are configured correctly.
