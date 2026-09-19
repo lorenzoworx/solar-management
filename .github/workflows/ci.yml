@@ -65,6 +65,7 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      - run: npm run build:shared
       - name: Check out the preceding verified container revision
         uses: actions/checkout@v4
         with:
