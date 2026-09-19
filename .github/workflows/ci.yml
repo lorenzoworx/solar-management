@@ -44,3 +44,45 @@ jobs:
           name: browser-test-results
           path: test-results/
           if-no-files-found: ignore
+
+  containers:
+    needs: check
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      APP_ORIGIN: https://127.0.0.1:8443
+      APP_IMAGE: solar-management:ci
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate disposable container credentials
+        run: |
+          ci_database_password="$(openssl rand -hex 32)"
+          echo "::add-mask::$ci_database_password"
+          echo "DATABASE_PASSWORD=$ci_database_password" >> "$GITHUB_ENV"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: docker compose --env-file .env.production.example -p sm-ci build app
+      - run: docker compose --env-file .env.production.example -p sm-ci up -d --wait app
+      - run: docker compose --env-file .env.production.example -p sm-ci run --rm migrate node server/dist/db/command.js seed
+      - run: bash scripts/verify-containers.sh .env.production.example sm-ci
+      - name: Create a temporary certificate for browser verification
+        run: |
+          mkdir -p .local
+          openssl req -x509 -newkey rsa:2048 -nodes -keyout .local/ci-key.pem -out .local/ci-cert.pem -days 1 -subj '/CN=localhost' -addext 'subjectAltName=IP:127.0.0.1'
+      - run: npx playwright install --with-deps chromium
+      - run: npx playwright test --config playwright.production.config.ts
+      - name: Container logs
+        if: failure()
+        run: docker compose --env-file .env.production.example -p sm-ci logs --no-color
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: production-browser-test-results
+          path: test-results/
+          if-no-files-found: ignore
+      - name: Remove the disposable CI deployment
+        if: always()
+        run: docker compose --env-file .env.production.example -p sm-ci down -v

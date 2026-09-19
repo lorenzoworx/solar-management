@@ -1,0 +1,55 @@
+x-app-env: &app-env
+  DATABASE_URL: postgres://solar_app:${DATABASE_PASSWORD:?Set DATABASE_PASSWORD}@db:5432/solar_management
+  APP_ORIGIN: ${APP_ORIGIN:?Set APP_ORIGIN to the public HTTPS origin}
+  TRUST_PROXY: ${TRUST_PROXY:-1}
+
+services:
+  db:
+    image: postgres:18-bookworm
+    environment:
+      POSTGRES_USER: solar_app
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:?Set DATABASE_PASSWORD}
+      POSTGRES_DB: solar_management
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    networks: [backend]
+    restart: unless-stopped
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -h 127.0.0.1 -U "$${POSTGRES_USER}" -d "$${POSTGRES_DB}"']
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  migrate:
+    image: ${APP_IMAGE:-solar-management:local}
+    environment: *app-env
+    command: [node, server/dist/db/command.js, migrate]
+    networks: [backend]
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: 'no'
+
+  app:
+    image: ${APP_IMAGE:-solar-management:local}
+    build: .
+    environment: *app-env
+    ports:
+      - '127.0.0.1:${APP_PORT:-3001}:3001'
+    networks: [backend, web]
+    depends_on:
+      db:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    init: true
+    restart: unless-stopped
+    stop_grace_period: 20s
+
+volumes:
+  postgres_data:
+
+networks:
+  backend:
+    internal: true
+  web:

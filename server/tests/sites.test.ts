@@ -39,6 +39,7 @@ describe('saved demo installations (real PostgreSQL)', () => {
     const response = await request(app).get('/api/demo/sites');
     expect(response.status).toBe(200);
     expect(response.body).toEqual({ sites: [] });
+    expect((await request(app).get('/api/ready')).body).toEqual({ status: 'ready' });
   });
 
   it('excludes non-demo records even when the caller asks for them', async () => {
@@ -77,6 +78,7 @@ describe('saved demo installations (real PostgreSQL)', () => {
       expect(response.status).toBe(503);
       expect(response.body).toEqual({ error: { message: 'Installations are temporarily unavailable. Please try again.' } });
       expect((await request(unavailableApp).get('/api/health')).status).toBe(200);
+      expect((await request(unavailableApp).get('/api/ready')).status).toBe(503);
     } finally {
       await unavailablePool.end();
       log.mockRestore();

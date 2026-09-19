@@ -9,7 +9,7 @@ test('a visitor can try the demo without registering', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'Add installation' })).toHaveCount(0);
 });
 
-test('registration, persistent login, site CRUD, logout and login', async ({ page }) => {
+test('registration, persistent login, site CRUD, logout and login', async ({ page, context, baseURL }) => {
   const email = `browser-${randomUUID()}@example.test`;
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/register');
@@ -18,6 +18,10 @@ test('registration, persistent login, site CRUD, logout and login', async ({ pag
   await page.getByLabel('Password').fill('A browser test passphrase!');
   await page.getByRole('button', { name: 'Create account', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'My installations' })).toBeVisible();
+  const sessionCookie = (await context.cookies()).find((cookie) => cookie.name.endsWith('sm_session'));
+  expect(sessionCookie?.httpOnly).toBe(true);
+  expect(sessionCookie?.sameSite).toBe('Lax');
+  expect(sessionCookie?.secure).toBe(Boolean(baseURL?.startsWith('https:')));
   await expect(page.getByText('No installations yet.', { exact: false })).toBeVisible();
   await page.getByRole('button', { name: 'Add installation' }).click();
   await page.getByLabel('Installation name').fill('Test rooftop');

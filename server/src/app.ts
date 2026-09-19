@@ -32,6 +32,14 @@ export function createApp(clientDirectory?: string, pool?: Pool, security: Secur
   });
 
   if (pool) {
+    app.get('/api/ready', async (_request, response) => {
+      try {
+        await pool.query('SELECT s.owner_id, r.solar_power_kw, a.resolved_at, ss.expires_at FROM sites s, readings r, alerts a, sessions ss LIMIT 0');
+        response.json({ status: 'ready' });
+      } catch {
+        response.status(503).json({ error: { message: 'Database is not ready.' } });
+      }
+    });
     app.use('/api/demo/sites', monitoringRouter(pool, security, true));
     app.use('/api/sites', monitoringRouter(pool, security));
     app.use('/api/demo/sites', demoSitesRouter(pool));

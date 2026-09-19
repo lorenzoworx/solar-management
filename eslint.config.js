@@ -7,7 +7,7 @@ import reactHooks from 'eslint-plugin-react-hooks';
 export default defineConfig([
   globalIgnores(['.local/**', '**/dist/**', '**/node_modules/**', 'coverage/**', 'playwright-report/**', 'test-results/**']),
   {
-    files: ['**/*.{js,ts,tsx}'],
+    files: ['**/*.{js,mjs,ts,tsx}'],
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     languageOptions: { globals: globals.node },
   },

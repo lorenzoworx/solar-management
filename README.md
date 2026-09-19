@@ -6,7 +6,7 @@ The starting point is an AI-assisted JavaScript prototype called Solar Dashboard
 
 ## Current status
 
-**Checkpoints 1–6 implemented. Deployment is next; learning tasks are deferred to [questions.md](questions.md).**
+**Checkpoints 1–6 implemented. Container deployment is prepared; public hosting awaits connection details. Learning tasks are deferred to [questions.md](questions.md).**
 
 Visitors can explore a read-only demo or register, log in, and manage their own installations. PostgreSQL persists accounts, sessions, and sites. The API validates inputs, checks ownership, protects writes with CSRF tokens, and rate limits account attempts. Monitoring includes stored simulated readings, date-filtered charts, energy estimates with coverage, and resolvable demo-rule alerts. Public deployment remains pending.
 
@@ -47,6 +47,8 @@ npm run test:e2e
 
 `check` runs ESLint, TypeScript checks, unit/API/UI tests, and production builds. PostgreSQL must be running. API tests migrate and clear only `solar_management_test`, so reserve that database for tests. Browser tests also use `solar_management_test`, applying migrations and seeding samples before starting their own servers. Run API and browser tests sequentially and stop an existing `npm run dev` session first. GitHub Actions runs the checks against PostgreSQL 18 on pushes to main and pull requests.
 
+The container CI job also builds the production image, checks Compose startup/migrations, restarts containers, verifies backup restoration, and runs browser scenarios through a local HTTPS proxy. See [deployment and recovery](docs/deployment.md) for Mac mini setup, Cloudflare routing, logs, backups, and rollback. Public access is not yet verified.
+
 ## Learn the project
 
 1. [Understand the original system](docs/checkpoints/01-understand-original.md): architecture, data model, and a request traced through the code to the database.
@@ -60,6 +62,17 @@ npm run test:e2e
 9. [Rebuild roadmap](docs/roadmap.md): the agreed design and remaining checkpoints.
 
 ## Source layout
+
+```mermaid
+flowchart LR
+  Browser[React + TanStack Query] -->|HTTP JSON + cookie| API[Express API]
+  API --> Validation[Shared runtime schemas]
+  API --> Session[PostgreSQL session + CSRF checks]
+  Session --> Queries[Parameterized SQL + ownership]
+  Queries --> Pool[Shared pg connection pool]
+  Pool --> DB[(PostgreSQL 18)]
+  Simulator[Local simulator] -->|Authenticated HTTP| API
+```
 
 | Directory | Responsibility |
 | --- | --- |
