@@ -6,9 +6,9 @@ The starting point is an AI-assisted JavaScript prototype called Solar Dashboard
 
 ## Current status
 
-**[Explore the live demo](https://boywithabot.com/projects/solar-management/). Checkpoints 1–6 are implemented; public account verification currently needs a proxy HTTPS fix. Learning tasks are deferred to the local, Git-ignored `questions.md` file.**
+**[Explore the live demo](https://boywithabot.com/projects/solar-management/). All eight public browser scenarios pass, including accounts and installation management. On-host recovery verification remains before the release tag. Learning tasks are deferred to the local, Git-ignored `questions.md` file.**
 
-Visitors can explore a read-only demo. The application also implements registration, login, and owned installations, tested locally and in containers; the current public proxy rejects account writes with “HTTPS is required.” PostgreSQL persists accounts, sessions, and sites. Monitoring includes stored simulated readings, date-filtered charts, energy estimates with coverage, and resolvable demo-rule alerts. See [live verification and the remaining release checks](docs/deployment.md#public-verification).
+Visitors can explore a read-only demo or register, log in, and manage their own installations. PostgreSQL persists accounts, sessions, and sites. Monitoring includes stored simulated readings, date-filtered charts, energy estimates with coverage, and resolvable demo-rule alerts. Accounts and monitoring are verified locally, in containers, and through the public HTTPS URL. See [live verification and the remaining release checks](docs/deployment.md#public-verification).
 
 ## Run locally
 
