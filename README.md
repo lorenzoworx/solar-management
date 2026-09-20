@@ -10,9 +10,13 @@ The starting point is an AI-assisted JavaScript prototype called Solar Dashboard
 
 Visitors can explore a read-only demo or register, log in, and manage their own installations. PostgreSQL persists accounts, sessions, and sites. Monitoring includes stored simulated readings, date-filtered charts, energy estimates with coverage, and resolvable demo-rule alerts. Accounts and monitoring are verified locally, in containers, and through the public HTTPS URL. See [live verification and the remaining release checks](docs/deployment.md#public-verification).
 
+For a quick introduction, follow the [three-minute project tour](docs/project-tour.md), including a request trace, an energy example, and the main design tradeoffs.
+
 ## Run locally
 
 ![Monitoring a simulated installation](docs/images/demo-monitoring.png)
+
+[View the mobile dashboard](docs/images/demo-monitoring-mobile.png).
 
 Use Node 24, npm 11 or newer, and PostgreSQL 18. If you use nvm, run `nvm use` first. On macOS, PostgreSQL is available through `brew install postgresql@18`; make its binaries available in your PATH.
 
