@@ -1,6 +1,6 @@
 # Deployment and recovery
 
-The application is available at [boywithabot.com/projects/solar-management/](https://boywithabot.com/projects/solar-management/) with PostgreSQL 18 and a Node 24 container. **Public functional verification passed; on-host recovery verification remains.** The owner handles Mac mini operations; remaining tasks and non-secret deployment records are in the local, Git-ignored `questions.md` file. Docker is not installed on the current development MacBook; container verification runs in GitHub Actions.
+The application is available at [boywithabot.com/projects/solar-management/](https://boywithabot.com/projects/solar-management/) with PostgreSQL 18 and a Node 24 container. **The owner confirms Mac mini deployment is complete, and public functional verification passes.** The latest repeat of all eight public scenarios passed in 21.8 seconds. Explicit confirmation of the on-host restart/login, backup/restore, and rollback checks remains before publishing the [v0.1.0 release draft](releases/v0.1.0.md). The owner handles Mac mini operations; non-secret deployment records are in the local, Git-ignored `questions.md` file.
 
 ## Public verification
 

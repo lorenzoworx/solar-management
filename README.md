@@ -6,7 +6,7 @@ The starting point is an AI-assisted JavaScript prototype called Solar Dashboard
 
 ## Current status
 
-**[Explore the live demo](https://boywithabot.com/projects/solar-management/). All eight public browser scenarios pass, including accounts and installation management. On-host recovery verification remains before the release tag. Learning tasks are deferred to the local, Git-ignored `questions.md` file.**
+**[Explore the live demo](https://boywithabot.com/projects/solar-management/). Mac mini deployment is complete, confirmed by the owner, and all eight public browser scenarios pass. The [v0.1.0 release draft](docs/releases/v0.1.0.md) records verification and the remaining recovery confirmation. Learning tasks are deferred to the local, Git-ignored `questions.md` file.**
 
 Visitors can explore a read-only demo or register, log in, and manage their own installations. PostgreSQL persists accounts, sessions, and sites. Monitoring includes stored simulated readings, date-filtered charts, energy estimates with coverage, and resolvable demo-rule alerts. Accounts and monitoring are verified locally, in containers, and through the public HTTPS URL. See [live verification and the remaining release checks](docs/deployment.md#public-verification).
 

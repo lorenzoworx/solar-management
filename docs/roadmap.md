@@ -16,7 +16,7 @@ Build in tested checkpoints with honest commits. As requested on September 18, 2
 | 4. Add accounts and ownership | Registration, sessions, logout, site CRUD, validation and authorization | Implemented; learning tasks deferred |
 | 5. Build monitoring | Ingestion, latest readings, history charts, energy summaries, local simulator submitting to the API | Implemented and tested |
 | 6. Finish alerts and demo | Rule-based alerts and resolution, read-only demo, responsive UI and failure states | Implemented and tested |
-| 7. Deploy and present | Container deployment, public URL, screenshots, operating instructions, interview practice | All eight public browser scenarios pass. Project tour, desktop/mobile screenshots, and private interview exercises are prepared. Container recovery passes in CI; on-host recovery, release tag, and learning review remain pending |
+| 7. Deploy and present | Container deployment, public URL, screenshots, operating instructions, interview practice | Mac mini deployment confirmed by owner; eight public browser scenarios pass. Tour, screenshots, exercises, and v0.1.0 release notes prepared. Final release awaits host recovery confirmation; learning review remains deferred |
 
 Repository initialization accompanies the first documentation commit so checkpoint 1 can be published. Application scaffolding and build tooling still belong to checkpoint 2.
 
