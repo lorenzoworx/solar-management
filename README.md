@@ -1,16 +1,18 @@
 # Solar Management
 
-A solar monitoring project being rebuilt in small, tested stages to develop and demonstrate full-stack engineering skills.
+A full-stack solar monitoring app. Visitors can explore a read-only demo, or register to manage their own installations, view stored readings on date-filtered charts, see energy estimates with their data coverage, and resolve alerts.
 
-The starting point is an AI-assisted JavaScript prototype called Solar Dashboard. This repository records a new implementation and the reasoning behind it, beginning with an examination of the prototype.
+**[Explore the live demo](https://boywithabot.com/projects/solar-management/)** · [Three-minute project tour](docs/project-tour.md) · [Case study](https://boywithabot.com/projects/project-details.html?id=solar-management)
+
+Built with React, TypeScript, Express, and PostgreSQL, and deployed with Docker Compose. The demo uses simulated readings and does not monitor real hardware.
+
+The project began as an AI-assisted JavaScript prototype called Solar Dashboard, which was rebuilt in small, tested stages. The [learning path](#learn-the-project) below records the reasoning behind each stage.
 
 ## Current status
 
-**[Explore the live demo](https://boywithabot.com/projects/solar-management/). Mac mini deployment is complete, confirmed by the owner, and all eight public browser scenarios pass. The [v0.1.0 release draft](docs/releases/v0.1.0.md) records verification and the remaining recovery confirmation. Learning tasks are deferred to the local, Git-ignored `questions.md` file.**
+Version 0.1.0 is deployed, and all eight public browser scenarios pass against the live site. PostgreSQL persists accounts, sessions, and sites. Accounts and monitoring are verified locally, in containers, and through the public HTTPS URL.
 
-Visitors can explore a read-only demo or register, log in, and manage their own installations. PostgreSQL persists accounts, sessions, and sites. Monitoring includes stored simulated readings, date-filtered charts, energy estimates with coverage, and resolvable demo-rule alerts. Accounts and monitoring are verified locally, in containers, and through the public HTTPS URL. See [live verification and the remaining release checks](docs/deployment.md#public-verification).
-
-For a quick introduction, follow the [three-minute project tour](docs/project-tour.md), including a request trace, an energy example, and the main design tradeoffs.
+The [v0.1.0 release draft](docs/releases/v0.1.0.md) records the verification, and one recovery check remains. See [live verification and the remaining release checks](docs/deployment.md#public-verification).
 
 ## Run locally
 
@@ -63,9 +65,8 @@ The container CI job also builds the production image, checks Compose startup/mi
 4. [Checkpoint 2 walkthrough and exercise](docs/checkpoints/02-foundation.md): follow the new request, run the tests, and debug a connection failure.
 5. [Checkpoint 3 walkthrough and exercise](docs/checkpoints/03-persistence.md): follow a database query and edit a stored installation.
 6. [Checkpoint 4 walkthrough](docs/checkpoints/04-accounts.md): sessions, ownership, validation, and security tradeoffs.
-7. Local `questions.md`: the consolidated learning backlog, kept outside Git.
-8. [Monitoring and alert notes](docs/checkpoints/05-monitoring-and-alerts.md): units, energy estimates, retry safety, and the HTTP simulator.
-9. [Rebuild roadmap](docs/roadmap.md): the agreed design and remaining checkpoints.
+7. [Monitoring and alert notes](docs/checkpoints/05-monitoring-and-alerts.md): units, energy estimates, retry safety, and the HTTP simulator.
+8. [Rebuild roadmap](docs/roadmap.md): the agreed design and remaining checkpoints.
 
 ## Source layout
 
@@ -102,6 +103,6 @@ Forecasting, PDF reports, real hardware integration, and battery monitoring are 
 
 ## How the rebuild works
 
-Each checkpoint has a concrete result, an explanation, relevant verification, and a hands-on exercise. Learning questions and exercises live in `questions.md`; implementation continues without waiting for answers, as requested on September 18, 2026. Commits record completed changes as they happen; notes distinguish implemented behavior from future plans.
+Each checkpoint has a concrete result, an explanation, relevant verification, and a hands-on exercise. Commits record completed changes as they happen; notes distinguish implemented behavior from future plans.
 
 The original application remains a separate reference. Source paths in the walkthrough refer to that original project, not files in this repository. Important excerpts are included so the walkthrough can also be read on GitHub.
