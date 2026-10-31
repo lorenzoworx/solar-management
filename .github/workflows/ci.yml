@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -103,3 +104,27 @@ jobs:
       - name: Remove the disposable CI deployment
         if: always()
         run: docker compose --env-file .env.production.example -p sm-ci down -v
+
+  deploy:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: containers
+    runs-on: [self-hosted, macOS, ARM64, solar-production]
+    timeout-minutes: 35
+    concurrency:
+      group: solar-production
+      cancel-in-progress: false
+    environment:
+      name: production
+      url: ${{ vars.PRODUCTION_URL }}/projects/solar-management/
+    steps:
+      - name: Check out the verified commit
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Deploy and verify the exact commit
+        env:
+          DEPLOY_STACK_DIR: ${{ vars.DEPLOY_STACK_DIR }}
+          PRODUCTION_URL: ${{ vars.PRODUCTION_URL }}
+        run: |
+          chmod -R a+rX "$GITHUB_WORKSPACE"
+          lockf -t 3600 -k /tmp/boywithabot-production-deploy.lock bash scripts/deploy-production.sh

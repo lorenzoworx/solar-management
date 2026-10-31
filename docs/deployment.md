@@ -103,6 +103,14 @@ docker compose --env-file .env.production -p solar-management up -d --no-deps --
 
 For a compatible application rollback, restore the previous `APP_IMAGE` value in `.env.production`, then run `up -d --no-deps --wait app` without rebuilding. Keep previous images until the new release is verified. Never automatically reverse a schema migration or delete the PostgreSQL volume to roll back application code. An incompatible schema change needs a planned data restore or forward fix.
 
+Pushes to `main` now deploy only after the complete check and container-recovery
+jobs pass. A dedicated self-hosted runner builds the triggering commit for the
+portfolio path, saves a PostgreSQL custom-format backup, applies migrations,
+smoke-tests the candidate on the private database network, promotes it, and checks
+the public readiness route. If a post-promotion check fails, the preceding
+CI-verified compatible image is restored; database migrations are never reversed
+automatically.
+
 Public demo HTTPS and account writes are verified. Persistent login after container restart, backup recovery on the Mac mini, and rollback to an actual preceding release remain release-gate checks in `questions.md`. No verified-release tag is created before those checks pass.
 
 ## CI deployment checks
