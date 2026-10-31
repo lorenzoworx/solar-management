@@ -68,3 +68,7 @@ Checkpoint 3 adds PostgreSQL 18, direct SQL, versioned migrations, a repeatable 
 Checkpoint 4 adds React Router, registration/login/logout, PostgreSQL sessions, scrypt password hashes, CSRF protection, authentication rate limits, and full owned-site CRUD. Shared Zod schemas validate new contracts. Browser tests now use the dedicated test database.
 
 Checkpoints 5–6 include the seven-day reproducible seed, UTC charts, trapezoidal energy with coverage, retry-safe ingestion, transactional alerts, resolution, and the authenticated HTTP simulator. Seventy-seven unit/API/UI checks and eight browser scenarios pass locally.
+
+## Visual refresh follow-up
+
+The monitoring UI adds a UTC clock arc, subject-specific colors, hatched missing intervals and a coverage strip, plus lazy sample-site previews. Energy, ownership, alerts, and ingestion rules are unchanged. The diagram explicitly avoids claiming an astronomical sun position. Focused presentation tests cover gap boundaries and UTC placement; the normal check and browser suites remain required. Learning review stays deferred in private questions.md.

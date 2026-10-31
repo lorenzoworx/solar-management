@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { getDemoSites } from '../../api/sites';
 import { Link } from 'react-router-dom';
+import { SitePreview } from './SitePreview';
 
 export function DemoSites() {
   const sites = useQuery({
@@ -34,6 +35,7 @@ export function DemoSites() {
               <p className="location">{site.location}</p>
               <p className="capacity"><strong>{site.capacityKw.toLocaleString(undefined, { maximumFractionDigits: 3 })}</strong> kW</p>
               <p className="capacity-label">Installed capacity</p>
+              <SitePreview id={site.id} capacity={site.capacityKw} />
               <Link className="button-link site-monitor-link" to={`/demo/sites/${site.id}`}>View monitoring</Link>
             </li>
           ))}

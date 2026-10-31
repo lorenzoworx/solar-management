@@ -8,6 +8,10 @@ Built with React, TypeScript, Express, and PostgreSQL, and deployed with Docker 
 
 The project began as an AI-assisted JavaScript prototype called Solar Dashboard, which was rebuilt in small, tested stages. The [learning path](#learn-the-project) below records the reasoning behind each stage.
 
+## Visual monitoring
+
+Installation monitoring now uses a schematic UTC sun arc: time comes from the latest stored sample and the glow scales with power relative to installed capacity. It is a clock diagram, not an astronomical position or forecast. Missing intervals are hatched on the chart, including unobserved edges of the selected window. The coverage strip uses the existing server summary; the 30-minute energy rule is unchanged. Sample installation cards lazily fetch real stored readings for their miniature charts. All views retain simulated-data labels, UTC dates, readings tables, and reduced-motion fallbacks.
+
 ## Current status
 
 Version 0.1.0 is deployed, and all eight public browser scenarios pass against the live site. PostgreSQL persists accounts, sessions, and sites. Accounts and monitoring are verified locally, in containers, and through the public HTTPS URL.
