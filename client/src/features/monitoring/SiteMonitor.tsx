@@ -1,10 +1,12 @@
-import { useEffect, useState, type FormEvent } from 'react';
+import { useEffect, useId, useState, type FormEvent } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link, Navigate, useParams, useSearchParams } from 'react-router-dom';
-import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { CartesianGrid, Line, LineChart, ReferenceArea, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { ingestResponseSchema, monitoringSchema, resolveResponseSchema, type Alert, type Reading } from '@solar-management/shared';
 import { apiRequest, ApiError, mutate } from '../../api/request';
 import { useSession } from '../auth/Auth';
+import { SunPath } from './SunPath';
+import { missingIntervals } from './presentation';
 
 const utc = (date: string) => new Date(date).toLocaleString(undefined, { timeZone: 'UTC', dateStyle: 'medium', timeStyle: 'short' }) + ' UTC';
 const alertText = (alert: Alert) => alert.type === 'high_temperature'
@@ -46,7 +48,9 @@ function ReadingForm({ id, saved }: { id: string; saved: () => void }) {
   </section>;
 }
 
-function PowerChart({ readings }: { readings: Reading[] }) {
+function PowerChart({ readings, from, to }: { readings: Reading[]; from: string; to: string }) {
+  const patternId = 'no-data-' + useId().replaceAll(':', '');
+  const gaps = missingIntervals(readings, from, to);
   // Insert a null point across excluded gaps so the chart doesn't imply observed continuity.
   const points: { time: number; power: number | null }[] = [];
   for (const reading of readings) {
@@ -57,11 +61,13 @@ function PowerChart({ readings }: { readings: Reading[] }) {
   return <div className="power-chart" role="img" aria-label="Solar power history in kilowatts; timestamps in UTC. Missing intervals are not connected.">
     <ResponsiveContainer width="100%" height="100%" minWidth={0}>
       <LineChart data={points} margin={{ top: 10, right: 16, left: 0, bottom: 10 }}>
-        <CartesianGrid stroke="#e5e9e1" strokeDasharray="3 3" />
-        <XAxis dataKey="time" type="number" domain={['dataMin', 'dataMax']} tickFormatter={(value: number) => new Date(value).toISOString().slice(5, 16).replace('T', ' ')} minTickGap={60} tick={{ fontSize: 11 }} />
+        <defs><pattern id={patternId} width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(35)"><line x1="0" x2="0" y1="0" y2="8" stroke="#aab5c4" strokeWidth="3" /></pattern></defs>
+        <CartesianGrid stroke="#d6dfe9" strokeDasharray="3 3" />
+        {gaps.map((gap) => <ReferenceArea key={gap.from} x1={gap.from} x2={gap.to} fill={`url(#${patternId})`} fillOpacity={1} label={{ value: 'No data', position: 'insideTop', fill: '#1b2b4a', fontSize: 12 }} />)}
+        <XAxis dataKey="time" type="number" domain={[Date.parse(from), Date.parse(to)]} tickFormatter={(value: number) => new Date(value).toISOString().slice(5, 16).replace('T', ' ')} minTickGap={60} tick={{ fontSize: 11 }} />
         <YAxis unit=" kW" tick={{ fontSize: 11 }} width={66} />
         <Tooltip labelFormatter={(value) => utc(new Date(Number(value)).toISOString())} />
-        <Line type="linear" dataKey="power" name="Solar power (kW)" stroke="#21735a" dot={readings.length === 1 ? { r: 4 } : false} connectNulls={false} isAnimationActive={false} />
+        <Line type="linear" dataKey="power" name="Solar power (kW)" stroke="#1b2b4a" dot={readings.length === 1 ? { r: 4 } : false} connectNulls={false} isAnimationActive={false} />
       </LineChart>
     </ResponsiveContainer>
   </div>;
@@ -98,6 +104,7 @@ export function SiteMonitor({ demo = false }: { demo?: boolean }) {
     </div>
     {adding && !demo && <ReadingForm id={id!} saved={() => setAdding(false)} />}
     <p className="freshness">{data.latest ? `Latest reading: ${utc(data.latest.recordedAt)}${monitor.dataUpdatedAt - Date.parse(data.latest.recordedAt) > 30 * 60000 ? ' · Historical data (over 30 minutes old)' : ''}` : 'No readings yet. Add a simulated reading or use the local simulator.'}</p>
+    <SunPath key={data.site.id} reading={data.latest} capacity={data.site.capacityKw} />
     <div className="metric-grid">
       <div className="metric-card"><span>Latest solar power</span><strong>{data.latest?.solarPowerKw ?? '—'} <small>kW</small></strong></div>
       <div className="metric-card"><span>Inverter AC voltage</span><strong>{data.latest?.acVoltageV ?? '—'} <small>V</small></strong></div>
@@ -107,9 +114,9 @@ export function SiteMonitor({ demo = false }: { demo?: boolean }) {
       <h2 id="history-heading">Power history</h2>
       <p className="collection-note">All dates are UTC. {data.availableRange ? `Stored data: ${utc(data.availableRange.from)} – ${utc(data.availableRange.to)}.` : 'No stored date range yet.'}</p>
       <DateRange key={data.range.from + data.range.to} from={data.range.from} to={data.range.to} apply={(from, to) => setParams({ from, to })} />
-      <div className="energy-summary"><strong>{data.summary.energyKwh.toFixed(3)} kWh estimated</strong><span>{data.summary.coveragePercent.toFixed(1)}% time coverage · {data.summary.incomplete ? 'Incomplete coverage' : 'Complete coverage'}</span></div>
+      <div className={`energy-summary ${data.summary.incomplete ? 'incomplete' : ''}`}><strong>{data.summary.energyKwh.toFixed(3)} kWh estimated</strong><span>{data.summary.coveragePercent.toFixed(1)}% time coverage · {data.summary.incomplete ? 'Incomplete coverage' : 'Complete coverage'}</span><div className="coverage-bar" role="img" aria-label={`${data.summary.coveragePercent.toFixed(1)} percent of this time window has covered readings`}><i style={{ width: `${data.summary.coveragePercent}%` }} /></div><small>{data.summary.coveredMinutes.toLocaleString(undefined, { maximumFractionDigits: 1 })} of {data.summary.windowMinutes.toLocaleString(undefined, { maximumFractionDigits: 1 })} minutes covered. Hatched portions are excluded, not zero output.</small></div>
       <p className="collection-note">Estimate for {utc(data.range.from)} – {utc(data.range.to)}. Uses adjacent power readings; gaps over 30 minutes are excluded. No energy is assumed outside observed intervals.</p>
-      {data.readings.length > 0 ? <PowerChart readings={data.readings} /> : <p className="empty-state">No readings in this date range.</p>}
+      {data.readings.length > 0 ? <><PowerChart readings={data.readings} from={data.range.from} to={data.range.to} /><p className="gap-legend"><span aria-hidden="true" />Hatched bands: no data. Gaps over 30 minutes and unobserved window edges are excluded.</p></> : <p className="empty-state">No readings in this date range.</p>}
       {data.readings.length > 0 && <details><summary>View latest 20 readings in this range</summary><div className="table-scroll"><table><thead><tr><th>Time (UTC)</th><th>Power (kW)</th><th>AC voltage (V)</th><th>Temperature (°C)</th></tr></thead><tbody>
         {data.readings.slice(-20).reverse().map((reading) => <tr key={reading.recordedAt}><td>{utc(reading.recordedAt)}</td><td>{reading.solarPowerKw}</td><td>{reading.acVoltageV ?? '—'}</td><td>{reading.inverterTempC ?? '—'}</td></tr>)}
       </tbody></table></div></details>}
